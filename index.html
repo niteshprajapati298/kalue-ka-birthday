@@ -8,6 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Background Music -->
+    <audio id="birthdayMusic" loop autoplay>
+        <source src="birthday-audio.mpeg" type="audio/mpeg">
+        <source src="birthday-audio.mpeg" type="audio/mpeg">
+    </audio>
+    
+    <!-- Music Control Button -->
+    <button class="music-control" id="musicToggle" onclick="toggleMusic()" title="Music on/off">
+        <span class="music-icon">🎵</span>
+        <span class="music-text">Gaana ON Hai</span>
+    </button>
     <!-- Animated Background -->
     <div class="balloons">
         <div class="balloon balloon1">🎈</div>
@@ -24,13 +35,14 @@
             <div class="hero-image-wrapper clickable-element" onclick="createClickEffect(event); surpriseHeroClick()">
                 <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
                 <div class="image-glow"></div>
-                <div class="click-indicator">👆 Click me! 👆</div>
+                <div class="click-indicator">👆 Click kar ke dekho kya hota hai! 👆</div>
                 <div class="click-counter" id="heroClickCounter">Clicks: 0</div>
             </div>
             <div class="hero-text">
-                <h1 class="title clickable-element">Happy Birthday</h1>
-                <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA!</h2>
-                <p class="date clickable-element" onclick="createClickEffect(event)">January 10th 🎂</p>
+                <h1 class="title clickable-element">Janmdin Mubarak Ho!</h1>
+                <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA! 🎉</h2>
+                <p class="date clickable-element" onclick="createClickEffect(event)">10th January 🎂</p>
+                <p class="hero-subtitle">Aaj tera special din hai! 💝</p>
             </div>
         </div>
         <div class="cake-container">
@@ -40,7 +52,7 @@
                 </div>
                 <div class="frosting"></div>
                 <div class="cake-base"></div>
-                <div class="cake-hint">🎂 Click to blow candle!</div>
+                <div class="cake-hint">🎂 Candle ko blow karna hai? Click kar! 🎂</div>
             </div>
         </div>
     </section>
@@ -60,7 +72,8 @@
                     <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">🌟 Adventures</span>
                     <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">💝 Endless Happiness</span>
                 </div>
-                <div class="click-hint">👆 Click on anything to see magic! 👆</div>
+                <div class="click-hint hinglish-instruction">👆 Kuch bhi click kar, magic hoga! 👆</div>
+                <div class="hinglish-instruction fun-instruction">💡 Pro Tip: Sab kuch click kar ke dekho, har jagah surprise hai! 💡</div>
                 <button class="party-btn" onclick="startParty()">
                     <span>🎊 Click for Party! 🎊</span>
                 </button>
@@ -70,6 +83,8 @@
         <!-- Photo Gallery Section -->
         <section class="gallery-section">
             <h3 class="section-title gallery-title clickable-element" onclick="createClickEffect(event); shuffleGallery()">💖 Beautiful Memories 💖</h3>
+            <div class="hinglish-instruction gallery-instruction">📸 Photos par click kar, bada wala photo dikhega! 📸</div>
+            <div class="hinglish-instruction shuffle-hint">🔄 Title par click kar, photos shuffle ho jayengi! 🔄</div>
             <div class="gallery-container">
                 <div class="gallery-grid">
                     <div class="gallery-item shape-circle" data-image="kalu-2.png">

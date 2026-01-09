@@ -7,6 +7,78 @@ canvas.height = window.innerHeight;
 let confettiParticles = [];
 let isPartyActive = false;
 
+// Music control
+const birthdayMusic = document.getElementById('birthdayMusic');
+const musicToggle = document.getElementById('musicToggle');
+let isMusicPlaying = true;
+
+// Start music on page load
+function initMusic() {
+    if (birthdayMusic) {
+        birthdayMusic.loop = true;
+        birthdayMusic.volume = 0.6; // Set volume to 60%
+        
+        // Play music on first user interaction anywhere on page
+        const startMusic = () => {
+            if (birthdayMusic.paused && isMusicPlaying) {
+                birthdayMusic.play().then(() => {
+                    showHinglishMessage('🎵 Music shuru ho gayi! 🎵', 2000);
+                }).catch(e => {
+                    console.log('Music play prevented');
+                });
+            }
+        };
+        
+        // Try multiple ways to start music
+        document.addEventListener('click', startMusic, { once: true });
+        document.addEventListener('touchstart', startMusic, { once: true });
+        document.addEventListener('keydown', startMusic, { once: true });
+        
+        // Try to play immediately (may not work due to browser policies)
+        birthdayMusic.play().catch(e => {
+            console.log('Autoplay prevented, waiting for user interaction');
+        });
+        
+        // Ensure music loops (backup)
+        birthdayMusic.addEventListener('ended', () => {
+            birthdayMusic.currentTime = 0;
+            if (isMusicPlaying) {
+                birthdayMusic.play();
+            }
+        });
+        
+        // Handle any pauses and restart
+        birthdayMusic.addEventListener('pause', () => {
+            if (isMusicPlaying) {
+                // Restart if paused but should be playing
+                setTimeout(() => {
+                    if (isMusicPlaying && birthdayMusic.paused) {
+                        birthdayMusic.play();
+                    }
+                }, 100);
+            }
+        });
+    }
+}
+
+function toggleMusic() {
+    if (!birthdayMusic) return;
+    
+    if (isMusicPlaying) {
+        birthdayMusic.pause();
+        isMusicPlaying = false;
+        musicToggle.classList.add('muted');
+        musicToggle.querySelector('.music-text').textContent = 'Music OFF';
+        musicToggle.querySelector('.music-icon').textContent = '🔇';
+    } else {
+        birthdayMusic.play();
+        isMusicPlaying = true;
+        musicToggle.classList.remove('muted');
+        musicToggle.querySelector('.music-text').textContent = 'Music ON';
+        musicToggle.querySelector('.music-icon').textContent = '🎵';
+    }
+}
+
 // Hero image cycling
 const heroImages = [
     'kalaua.png',
@@ -123,6 +195,13 @@ function startParty() {
     if (isPartyActive) return;
     
     isPartyActive = true;
+    showHinglishMessage('🎊 PARTY SHURU! Dance kar! 🎊', 2500);
+    
+    // Increase music volume during party
+    if (birthdayMusic && isMusicPlaying) {
+        birthdayMusic.volume = 0.8;
+    }
+    
     createConfetti();
     createEmojiRain();
     
@@ -213,6 +292,11 @@ function startParty() {
             button.style.animation = 'buttonPulse 2s ease-in-out infinite';
         }
         document.body.style.animation = 'gradientShift 15s ease infinite';
+        
+        // Reset music volume
+        if (birthdayMusic && isMusicPlaying) {
+            birthdayMusic.volume = 0.6;
+        }
     }, 15000);
 }
 
@@ -550,10 +634,17 @@ function animateBadge(element) {
 let candleBlown = false;
 function blowCandle() {
     const flame = document.getElementById('flame');
-    if (!flame || candleBlown) return;
+    if (!flame || candleBlown) {
+        if (candleBlown) {
+            showHinglishMessage('Candle already blow ho chuki hai! 😅', 2000);
+        }
+        return;
+    }
     
     candleBlown = true;
     flame.classList.add('blown');
+    
+    showHinglishMessage('Wah! Candle blow ho gayi! 🎉 Wish karo! 🎂', 2000);
     
     // Create celebration effect
     setTimeout(() => {
@@ -586,13 +677,30 @@ function surpriseHeroClick() {
         }, 2000);
     }
     
+    // Ensure music plays on first click
+    if (birthdayMusic && isMusicPlaying && birthdayMusic.paused) {
+        birthdayMusic.play();
+    }
+    
     // Change image immediately
     cycleHeroImage();
+    
+    // Hinglish messages based on clicks
+    const messages = [
+        'Waah! Aur click kar! 😄',
+        'Mast hai! Phir se try kar! 🎉',
+        'Bohot sahi! Keep going! 🚀',
+        'Legend! Ek aur! 💪'
+    ];
+    if (heroClickCount <= 4) {
+        showHinglishMessage(messages[heroClickCount - 1], 1500);
+    }
     
     // Special effects based on click count
     if (heroClickCount % 5 === 0) {
         // Every 5 clicks, do something special
         startParty();
+        showHinglishMessage(`${heroClickCount} clicks! PARTY TIME! 🎊`, 2000);
         if (clickCounter) {
             clickCounter.textContent = `🎉 ${heroClickCount} CLICKS! PARTY TIME! 🎉`;
             clickCounter.style.background = 'rgba(255, 107, 157, 0.95)';
@@ -640,7 +748,66 @@ function shuffleGallery() {
             createClickEffect(fakeEvent);
         }, i * 50);
     }
+    
+    // Show Hinglish message
+    showHinglishMessage('Wah! Photos shuffle ho gayi! 🎉', 2000);
 }
+
+// Show Hinglish messages
+function showHinglishMessage(message, duration = 3000) {
+    const messageEl = document.createElement('div');
+    messageEl.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.95), rgba(118, 75, 162, 0.95));
+        color: white;
+        padding: 20px 40px;
+        border-radius: 30px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        animation: messagePop 0.5s ease;
+        pointer-events: none;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+    `;
+    messageEl.textContent = message;
+    document.body.appendChild(messageEl);
+    
+    setTimeout(() => {
+        messageEl.style.animation = 'messagePopOut 0.5s ease forwards';
+        setTimeout(() => messageEl.remove(), 500);
+    }, duration);
+}
+
+// Add message animations
+const messageStyle = document.createElement('style');
+messageStyle.textContent = `
+    @keyframes messagePop {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+    @keyframes messagePopOut {
+        0% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+    }
+`;
+document.head.appendChild(messageStyle);
 
 // Add spin animation
 const spinStyle = document.createElement('style');
@@ -655,6 +822,9 @@ document.head.appendChild(spinStyle);
 
 // Add some floating emojis on page load
 window.addEventListener('load', () => {
+    // Initialize music
+    initMusic();
+    
     setTimeout(() => {
         createEmojiRain();
     }, 1500);
@@ -697,6 +867,16 @@ window.addEventListener('load', () => {
             item.classList.add('clicked');
             setTimeout(() => item.classList.remove('clicked'), 400);
             createClickEffect(e);
+            
+            // Random Hinglish messages
+            const messages = [
+                'Photo khul gayi! 👀',
+                'Mast photo hai! 📸',
+                'Aur photos dekh! 🖼️',
+                'Beautiful! 💖'
+            ];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            setTimeout(() => showHinglishMessage(randomMsg, 1500), 300);
         });
     });
     
