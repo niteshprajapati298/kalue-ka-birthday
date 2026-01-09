@@ -42,9 +42,14 @@ function initAudio() {
         if (hasUserInteracted) return;
         hasUserInteracted = true;
         birthdayMusic.muted = false;
+        birthdayMusic.play().catch(() => {
+            console.log('Play blocked, will retry on next interaction');
+        });
         fadeInAudio();
         if (!audioCtx) {
             initAudioViz();
+        } else if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
         }
         document.removeEventListener('click', unmuteOnInteraction);
         document.removeEventListener('touchstart', unmuteOnInteraction);
@@ -348,6 +353,7 @@ const heroImages = [
 ];
 
 let currentHeroImageIndex = 0;
+let heroCycleInterval;
 
 function createRainingImages() {
     const rainingContainer = document.getElementById('rainingImages');
@@ -434,6 +440,13 @@ function cycleHeroImage() {
     }, 300);
 }
 
+function startHeroAutoCycle() {
+    if (heroCycleInterval) clearInterval(heroCycleInterval);
+    heroCycleInterval = setInterval(() => {
+        cycleHeroImage();
+        createConfettiBurst();
+    }, 3500);
+}
 const cake = document.getElementById('cake');
 if (cake) {
     let bounceCount = 0;
@@ -749,6 +762,9 @@ galleryItems.forEach(item => {
         }
     });
 });
+
+// Auto hero image cycle
+startHeroAutoCycle();
 
 /* ============================================
    GALLERY 3D TILT & SWIPE
