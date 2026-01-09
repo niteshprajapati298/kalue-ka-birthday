@@ -21,52 +21,45 @@ const CONFIG = {
    AUDIO SYSTEM - AUTO-PLAY WITH UNMUTE
    ============================================ */
 const birthdayMusic = document.getElementById('birthdayMusic');
-let isMusicUnmuted = false;
 let hasUserInteracted = false;
 
 function initAudio() {
     if (!birthdayMusic) return;
     
-    // Set initial properties
     birthdayMusic.loop = true;
     birthdayMusic.volume = 0;
     birthdayMusic.muted = true;
     
-    // Try to play muted immediately (works in most browsers)
-    birthdayMusic.play().catch(e => {
+    birthdayMusic.play().catch(() => {
         console.log('Autoplay prevented, will start on interaction');
     });
     
-    // Fade in music after page loads
     setTimeout(() => {
         fadeInAudio();
     }, 1500);
     
-    // Unmute on first user interaction
     const unmuteOnInteraction = () => {
-        if (!hasUserInteracted) {
-            hasUserInteracted = true;
-            birthdayMusic.muted = false;
-            fadeInAudio();
-            
-            // Remove listeners after first interaction
-            document.removeEventListener('click', unmuteOnInteraction);
-            document.removeEventListener('touchstart', unmuteOnInteraction);
-            document.removeEventListener('keydown', unmuteOnInteraction);
+        if (hasUserInteracted) return;
+        hasUserInteracted = true;
+        birthdayMusic.muted = false;
+        fadeInAudio();
+        if (!audioCtx) {
+            initAudioViz();
         }
+        document.removeEventListener('click', unmuteOnInteraction);
+        document.removeEventListener('touchstart', unmuteOnInteraction);
+        document.removeEventListener('keydown', unmuteOnInteraction);
     };
     
     document.addEventListener('click', unmuteOnInteraction, { once: true });
     document.addEventListener('touchstart', unmuteOnInteraction, { once: true });
     document.addEventListener('keydown', unmuteOnInteraction, { once: true });
     
-    // Ensure music continues playing
     birthdayMusic.addEventListener('ended', () => {
         birthdayMusic.currentTime = 0;
         birthdayMusic.play();
     });
     
-    // Handle visibility change
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && birthdayMusic.paused) {
             birthdayMusic.play();
@@ -96,26 +89,79 @@ function fadeInAudio() {
 }
 
 /* ============================================
+   AUDIO VISUALIZER
+   ============================================ */
+let audioCtx;
+let analyser;
+let dataArray;
+let audioVizCtx;
+
+function initAudioViz() {
+    const viz = document.getElementById('audioViz');
+    if (!viz || !birthdayMusic) return;
+    audioVizCtx = viz.getContext('2d');
+    viz.width = window.innerWidth;
+    viz.height = 120;
+    
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaElementSource(birthdayMusic);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 64;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    
+    function draw() {
+        requestAnimationFrame(draw);
+        if (!audioVizCtx || !analyser) return;
+        analyser.getByteFrequencyData(dataArray);
+        audioVizCtx.clearRect(0, 0, viz.width, viz.height);
+        const barWidth = (viz.width / dataArray.length) * 1.5;
+        let x = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+            const barHeight = dataArray[i];
+            const grad = audioVizCtx.createLinearGradient(0, viz.height - barHeight, 0, viz.height);
+            grad.addColorStop(0, '#ff6b9d');
+            grad.addColorStop(0.5, '#feca57');
+            grad.addColorStop(1, '#4facfe');
+            audioVizCtx.fillStyle = grad;
+            audioVizCtx.fillRect(x, viz.height - barHeight, barWidth, barHeight);
+            x += barWidth + 2;
+        }
+    }
+    draw();
+}
+
+/* ============================================
    PAGE LOADER & ENTRY ANIMATION
    ============================================ */
 function initPageLoader() {
     const loader = document.getElementById('pageLoader');
     const appContainer = document.getElementById('appContainer');
+    const step1 = document.getElementById('loaderStep1');
+    const step2 = document.getElementById('loaderStep2');
+    const step3 = document.getElementById('loaderStep3');
     
     if (!loader || !appContainer) return;
     
-    // Simulate loading progress
+    // Step messaging
+    setTimeout(() => step1 && (step1.style.opacity = '1'), 200);
+    setTimeout(() => step2 && (step2.style.opacity = '1'), 900);
+    setTimeout(() => step3 && (step3.style.opacity = '1'), 1600);
+    
+    // Simulate loading progress + orchestrated entry
     setTimeout(() => {
         loader.classList.add('hidden');
         appContainer.classList.add('loaded');
         
-        // Trigger confetti burst
         setTimeout(() => {
             createConfettiBurst();
             animateTitleLetters();
             animateNameLetters();
+            tiltHeroInit();
         }, 300);
-    }, 2000);
+    }, 2600);
 }
 
 /* ============================================
@@ -253,6 +299,36 @@ function createParticles() {
 }
 
 /* ============================================
+   BALLOON PHYSICS (LIGHT)
+   ============================================ */
+function initBalloonPhysics() {
+    const balloons = Array.from(document.querySelectorAll('.balloon')).map(el => ({
+        el,
+        y: window.innerHeight + Math.random() * 200,
+        x: Math.random() * window.innerWidth,
+        vy: -(1 + Math.random() * 1.5),
+        vx: (Math.random() - 0.5) * 0.4,
+        rot: Math.random() * 360,
+        vr: (Math.random() - 0.5) * 0.6
+    }));
+    
+    function step() {
+        balloons.forEach(b => {
+            b.x += b.vx + Math.sin(Date.now() * 0.001 + b.x) * 0.2;
+            b.y += b.vy;
+            b.rot += b.vr;
+            if (b.y < -200) {
+                b.y = window.innerHeight + 150;
+                b.x = Math.random() * window.innerWidth;
+            }
+            b.el.style.transform = `translate(${b.x}px, ${b.y}px) rotate(${b.rot}deg)`;
+        });
+        requestAnimationFrame(step);
+    }
+    step();
+}
+
+/* ============================================
    RAINING IMAGES
    ============================================ */
 const heroImages = [
@@ -367,6 +443,50 @@ if (cake) {
             cycleHeroImage();
         }
     });
+}
+
+/* ============================================
+   HERO PARALLAX / 3D
+   ============================================ */
+function tiltHeroInit() {
+    const wrapper = document.getElementById('heroImageWrapper');
+    if (!wrapper) return;
+    const strength = 12;
+    wrapper.addEventListener('mousemove', (e) => {
+        const rect = wrapper.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateY = ((x / rect.width) - 0.5) * strength;
+        const rotateX = ((y / rect.height) - 0.5) * -strength;
+        wrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+    });
+    wrapper.addEventListener('mouseleave', () => {
+        wrapper.style.transform = '';
+    });
+}
+
+function initHeroParallaxText() {
+    const heroText = document.querySelector('.hero-text');
+    if (!heroText) return;
+    window.addEventListener('scroll', () => {
+        const offset = window.scrollY * 0.1;
+        heroText.style.transform = `translateY(${offset}px)`;
+    });
+}
+
+function initMusicReactiveGlow() {
+    const title = document.getElementById('titleText');
+    const name = document.getElementById('nameText');
+    if (!title || !name) return;
+    let t = 0;
+    function glow() {
+        t += 0.02;
+        const glow = (Math.sin(t) + 1) * 0.5;
+        title.style.filter = `drop-shadow(0 0 ${20 + glow * 20}px rgba(255,255,255,0.8))`;
+        name.style.filter = `drop-shadow(0 0 ${15 + glow * 20}px rgba(255,255,255,0.8))`;
+        requestAnimationFrame(glow);
+    }
+    glow();
 }
 
 /* ============================================
@@ -631,6 +751,112 @@ galleryItems.forEach(item => {
 });
 
 /* ============================================
+   GALLERY 3D TILT & SWIPE
+   ============================================ */
+function initGalleryInteractions() {
+    galleryItems.forEach(item => {
+        // 3D tilt on mouse move
+        item.addEventListener('mousemove', (e) => {
+            const rect = item.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotY = ((x / rect.width) - 0.5) * 10;
+            const rotX = ((y / rect.height) - 0.5) * -10;
+            item.style.transform = `translateY(-5px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+        item.addEventListener('mouseleave', () => {
+            item.style.transform = '';
+        });
+
+        // Swipe navigation on touch
+        let startX = 0;
+        item.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        item.addEventListener('touchend', (e) => {
+            const delta = e.changedTouches[0].clientX - startX;
+            if (Math.abs(delta) > 60) {
+                if (delta > 0 && prevBtn) prevBtn.click();
+                if (delta < 0 && nextBtn) nextBtn.click();
+            }
+        });
+
+        // Double click / double tap to zoom
+        let tapTimeout;
+        item.addEventListener('click', () => {
+            if (tapTimeout) {
+                clearTimeout(tapTimeout);
+                tapTimeout = null;
+                item.classList.toggle('zoomed');
+            } else {
+                tapTimeout = setTimeout(() => {
+                    tapTimeout = null;
+                }, 250);
+            }
+        });
+    });
+}
+
+/* ============================================
+   FUNNY MICRO-INTERACTIONS
+   ============================================ */
+function initKonamiCode() {
+    const sequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let index = 0;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === sequence[index]) {
+            index++;
+            if (index === sequence.length) {
+                showHinglishMessage('कोनामी कोड! तू असली गेमर है! 🎮', 3000);
+                startParty();
+                index = 0;
+            }
+        } else {
+            index = 0;
+        }
+    });
+}
+
+function initRunAwayElements() {
+    const runners = document.querySelectorAll('.highlight, .party-btn');
+    runners.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            const dx = (Math.random() - 0.5) * 80;
+            const dy = (Math.random() - 0.5) * 40;
+            el.style.transform = `translate(${dx}px, ${dy}px) scale(1.02)`;
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+        });
+    });
+}
+
+function initFunnyTooltips() {
+    const highlights = document.querySelectorAll('.highlight');
+    highlights.forEach(el => {
+        el.setAttribute('title', 'मुझे दबाओ, मस्ती पाओ! 🤪');
+    });
+}
+
+/* ============================================
+   ELASTIC BUTTONS
+   ============================================ */
+function initElasticButtons() {
+    const btns = document.querySelectorAll('.party-btn, .highlight');
+    btns.forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+            btn.style.transform += ' scale(0.95)';
+        });
+        btn.addEventListener('mouseup', () => {
+            btn.style.transform = btn.style.transform.replace(' scale(0.95)', '');
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = btn.style.transform.replace(' scale(0.95)', '');
+        });
+    });
+}
+
+/* ============================================
    SCROLL ANIMATIONS
    ============================================ */
 function initScrollAnimations() {
@@ -660,6 +886,95 @@ function initScrollAnimations() {
 }
 
 /* ============================================
+   SCROLL PARALLAX & PROGRESS
+   ============================================ */
+let confettiMilestoneTriggered = false;
+function initScrollSystems() {
+    const progress = document.getElementById('scrollProgress');
+    const floatingElements = document.querySelector('.floating-elements');
+    const particles = document.querySelector('.particles');
+    const balloons = document.querySelector('.balloons');
+    
+    const update = () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const progressVal = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        if (progress) progress.style.width = `${progressVal}%`;
+        
+        const parallax = scrollTop * 0.1;
+        if (floatingElements) floatingElements.style.transform = `translateY(${parallax}px)`;
+        if (particles) particles.style.transform = `translateY(${parallax * 0.6}px)`;
+        if (balloons) balloons.style.transform = `translateY(${parallax * 0.4}px)`;
+        
+        if (!confettiMilestoneTriggered && progressVal > 50) {
+            confettiMilestoneTriggered = true;
+            createConfettiBurst();
+        }
+        requestAnimationFrame(update);
+    };
+    update();
+}
+
+/* ============================================
+   RIPPLE & GLITCH EFFECTS
+   ============================================ */
+function initRippleEffect() {
+    document.addEventListener('click', (e) => {
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        ripple.style.left = `${e.clientX}px`;
+        ripple.style.top = `${e.clientY}px`;
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 800);
+    });
+}
+
+function initGlitchEffect() {
+    const title = document.getElementById('titleText');
+    if (!title) return;
+    setInterval(() => {
+        title.classList.add('glitch');
+        setTimeout(() => title.classList.remove('glitch'), 500);
+    }, 8000);
+}
+
+/* ============================================
+   CUSTOM CURSOR & MAGNETIC EFFECTS
+   ============================================ */
+function initCustomCursor() {
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    document.body.appendChild(cursor);
+    
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = `${mouseX}px`;
+        cursor.style.top = `${mouseY}px`;
+    });
+    
+    // Magnetic effect
+    const magnetics = document.querySelectorAll('.party-btn, .highlight, .gallery-item');
+    magnetics.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('magnetic'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('magnetic'));
+        
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.1;
+            const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.1;
+            el.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+        });
+    });
+}
+
+/* ============================================
    INITIALIZATION
    ============================================ */
 window.addEventListener('load', () => {
@@ -668,6 +983,19 @@ window.addEventListener('load', () => {
     createParticles();
     createRainingImages();
     initScrollAnimations();
+    initGalleryInteractions();
+    initBalloonPhysics();
+    tiltHeroInit();
+    initHeroParallaxText();
+    initMusicReactiveGlow();
+    initElasticButtons();
+    initKonamiCode();
+    initRunAwayElements();
+    initFunnyTooltips();
+    initRippleEffect();
+    initGlitchEffect();
+    initCustomCursor();
+    initScrollSystems();
     
     // Start confetti animation loop
     animateConfetti();

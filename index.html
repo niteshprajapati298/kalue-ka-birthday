@@ -18,10 +18,17 @@
         <div class="loader-content">
             <div class="loader-text" id="loaderText">🎉</div>
             <div class="loader-progress"></div>
+            <div class="loader-steps">
+                <span class="loader-step" id="loaderStep1">तैयार हो? 🎈</span>
+                <span class="loader-step" id="loaderStep2">कॉन्फ़ेटी आ रही है... ✨</span>
+                <span class="loader-step" id="loaderStep3">पार्टी शुरू! 🎊</span>
+            </div>
         </div>
     </div>
 
     <!-- Main Container -->
+    <div class="scroll-progress"><div class="scroll-progress__bar" id="scrollProgress"></div></div>
+
     <div class="app-container" id="appContainer">
         <!-- Animated Background -->
         <div class="animated-background">
@@ -65,17 +72,17 @@
                 
                 <div class="hero-text">
                     <h1 class="title" id="titleText">
-                        <span class="letter">J</span><span class="letter">a</span><span class="letter">n</span><span class="letter">m</span><span class="letter">d</span><span class="letter">i</span><span class="letter">n</span>
-                        <span class="letter">M</span><span class="letter">u</span><span class="letter">b</span><span class="letter">a</span><span class="letter">r</span><span class="letter">a</span><span class="letter">k</span>
-                        <span class="letter">H</span><span class="letter">o</span>
+                        <span class="letter">ज</span><span class="letter">न</span><span class="letter">्</span><span class="letter">म</span><span class="letter">द</span><span class="letter">ि</span><span class="letter">न</span>
+                        <span class="letter">मु</span><span class="letter">बा</span><span class="letter">र</span><span class="letter">क</span>
+                        <span class="letter">हो</span>
                         <span class="emoji-letter">🎊</span>
                     </h1>
                     <h2 class="name" id="nameText">
                         <span class="letter">K</span><span class="letter">A</span><span class="letter">L</span><span class="letter">U</span><span class="letter">A</span>
                         <span class="emoji-letter">🎉</span>
                     </h2>
-                    <p class="date" id="dateText">10th January - Tera Special Day! 🎂</p>
-                    <p class="hero-subtitle" id="subtitleText">Aaj tu superstar hai! 🔥💝</p>
+                    <p class="date" id="dateText">10 जनवरी - तेरा स्पेशल दिन! 🎂</p>
+                    <p class="hero-subtitle" id="subtitleText">आज तू सुपरस्टार है! 🔥💝</p>
                 </div>
             </div>
             
@@ -95,23 +102,23 @@
             <!-- Message Section -->
             <section class="message-section">
                 <div class="message-card">
-                    <h3 class="section-title">🎊 Birthday Wishes - Dil Se! 🎊</h3>
-                    <p class="wish-text">Bro, tera birthday hai toh ekdum mast wishes chahiye na! Tere liye chahte hain:</p>
+                <h3 class="section-title">🎊 दिल से बर्थडे विशेज़ 🎊</h3>
+                <p class="wish-text">भाई, तेरे लिए सबसे बढ़िया विशेज़! ये सब तेरा हक़ है:</p>
                     <div class="highlights">
-                        <span class="highlight">✨ Zindagi Bhar Khushi</span>
-                        <span class="highlight">😄 Hasna-Rona Dono</span>
-                        <span class="highlight">🌟 Naye Naye Adventures</span>
-                        <span class="highlight">💝 Doston Ke Saath Fun</span>
+                    <span class="highlight">✨ ज़िंदगी भर खुशी</span>
+                    <span class="highlight">😄 हँसी-मज़ाक हमेशा</span>
+                    <span class="highlight">🌟 नए-नए एडवेंचर</span>
+                    <span class="highlight">💝 दोस्तों के साथ फुल मस्ती</span>
                     </div>
                     <button class="party-btn" id="partyBtn">
-                        <span>🎊 Ab Party Shuru Karte Hain! 🎊</span>
+                    <span>🎊 अब पार्टी शुरू करते हैं! 🎊</span>
                     </button>
                 </div>
             </section>
 
             <!-- Photo Gallery Section -->
             <section class="gallery-section">
-                <h3 class="section-title gallery-title">💖 Yaadein - Kuch Fun Wali! 💖</h3>
+            <h3 class="section-title gallery-title">💖 यादें - सबसे मज़ेदार वाली! 💖</h3>
                 <div class="gallery-container">
                     <div class="gallery-grid" id="galleryGrid">
                         <div class="gallery-item shape-circle" data-image="kalu-2.png">
@@ -190,17 +197,33 @@
                 </div>
             </section>
 
+            <!-- Storytelling Section -->
+            <section class="story-section">
+                <div class="story-card" id="storyCard">
+                    <h3 class="section-title">❤️ दिल से कहानी</h3>
+                    <ul class="story-list" id="storyList">
+                        <li class="story-step">तू आया, हम सब मुस्कुराए। 😊</li>
+                        <li class="story-step">हर याद में तेरी हंसी, तेरी बात। 😄</li>
+                        <li class="story-step">आज का दिन पूरा तेरे नाम, बर्थडे बॉय! 🎂</li>
+                        <li class="story-step">अगले साल तक धमाल चालू! 🚀</li>
+                    </ul>
+                    <p class="story-subtext">कहानी चल रही है... स्क्रोल करते रहो!</p>
+                </div>
+            </section>
+
             <!-- Ending Message -->
             <section class="ending-section">
                 <div class="ending-card">
-                    <p class="ending-text">Made with ❤️ just for you</p>
-                    <p class="ending-subtext">Hope you have an amazing year ahead!</p>
+                <p class="ending-text">प्यार से बनाया गया बस तेरे लिए ❤️</p>
+                <p class="ending-subtext">आने वाला साल धमाकेदार हो!</p>
                 </div>
             </section>
         </main>
 
         <!-- Confetti Canvas -->
         <canvas id="confetti"></canvas>
+        <!-- Audio Visualizer -->
+        <canvas id="audioViz"></canvas>
         
         <!-- Funny Messages Container -->
         <div id="funnyMessages" class="funny-messages"></div>
