@@ -634,9 +634,24 @@ function animateBadge(element) {
 let candleBlown = false;
 function blowCandle() {
     const flame = document.getElementById('flame');
+    const cake = document.getElementById('cake');
+    
     if (!flame || candleBlown) {
         if (candleBlown) {
-            showHinglishMessage('Candle already blow ho chuki hai! 😅', 2000);
+            const funnyAlreadyBlown = [
+                'Candle already blow ho chuki hai! 😅',
+                'Yaar ek baar hi blow hoti hai! 🤣',
+                'Candle ko phir se nahi ura sakte! 😂',
+                'Candle already uda di, ab wish kar le! 🕯️'
+            ];
+            const msg = funnyAlreadyBlown[Math.floor(Math.random() * funnyAlreadyBlown.length)];
+            showHinglishMessage(msg, 2000);
+            
+            // Make cake dance
+            if (cake) {
+                cake.classList.add('funny-shake');
+                setTimeout(() => cake.classList.remove('funny-shake'), 500);
+            }
         }
         return;
     }
@@ -644,7 +659,20 @@ function blowCandle() {
     candleBlown = true;
     flame.classList.add('blown');
     
-    showHinglishMessage('Wah yaar! Candle blow ho gayi! 🎉 Ab wish kar le bhai! 🎂', 2500);
+    const blowMessages = [
+        'Wah yaar! Candle blow ho gayi! 🎉 Ab wish kar le bhai! 🎂',
+        'Candle uda di! Ab wish karna bhai! Make it count! 🕯️✨',
+        'Blow ho gaya! Wish zaroor pura hoga! 🎂🎉',
+        'Candle blow! Wish kar le, tu legend hai! 🏆🎂'
+    ];
+    const msg = blowMessages[Math.floor(Math.random() * blowMessages.length)];
+    showHinglishMessage(msg, 2500);
+    
+    // Make cake dance
+    if (cake) {
+        cake.classList.add('funny-spin');
+        setTimeout(() => cake.classList.remove('funny-spin'), 1000);
+    }
     
     // Create celebration effect
     setTimeout(() => {
@@ -652,6 +680,11 @@ function blowCandle() {
         createEmojiRain();
         animateConfetti();
         isPartyActive = true;
+        
+        // Extra funny message
+        setTimeout(() => {
+            showHinglishMessage('Wish kar liya? Ab party karo! 🎊', 2000);
+        }, 3000);
         
         setTimeout(() => {
             isPartyActive = false;
@@ -685,6 +718,13 @@ function surpriseHeroClick() {
     // Change image immediately
     cycleHeroImage();
     
+    // Add funny shake animation
+    const heroWrapper = document.querySelector('.hero-image-wrapper');
+    if (heroWrapper) {
+        heroWrapper.classList.add('funny-shake');
+        setTimeout(() => heroWrapper.classList.remove('funny-shake'), 500);
+    }
+    
     // Hinglish messages based on clicks - More funny
     const messages = [
         'Waah bhai! Aur click kar! 😄',
@@ -694,7 +734,12 @@ function surpriseHeroClick() {
         'Chal raha hai bhai! Aur kar! 🔥',
         'Shabash! Phir se! 👏'
     ];
-    if (heroClickCount <= 4) {
+    
+    // Show funny message occasionally
+    if (Math.random() > 0.5) {
+        const funnyMsg = funnyClickMessages[Math.floor(Math.random() * funnyClickMessages.length)];
+        showHinglishMessage(funnyMsg, 1500);
+    } else if (heroClickCount <= 4) {
         showHinglishMessage(messages[heroClickCount - 1], 1500);
     }
     
@@ -702,7 +747,7 @@ function surpriseHeroClick() {
     if (heroClickCount % 5 === 0) {
         // Every 5 clicks, do something special
         startParty();
-        showHinglishMessage(`${heroClickCount} clicks! PARTY TIME! 🎊`, 2000);
+        showHinglishMessage(`${heroClickCount} clicks! AB PARTY TIME! 🎊`, 2000);
         if (clickCounter) {
             clickCounter.textContent = `🎉 ${heroClickCount} CLICKS! AB PARTY TIME! 🎉`;
             clickCounter.style.background = 'rgba(255, 107, 157, 0.95)';
@@ -711,12 +756,19 @@ function surpriseHeroClick() {
             }, 3000);
         }
     } else {
-        // Spin effect
+        // Spin effect with funny variations
         if (heroImage) {
-            heroImage.style.animation = 'spin 0.5s ease';
-            setTimeout(() => {
-                heroImage.style.animation = '';
-            }, 500);
+            if (heroClickCount % 3 === 0) {
+                if (heroWrapper) {
+                    heroWrapper.classList.add('funny-spin');
+                    setTimeout(() => heroWrapper.classList.remove('funny-spin'), 1000);
+                }
+            } else {
+                heroImage.style.animation = 'spin 0.5s ease';
+                setTimeout(() => {
+                    heroImage.style.animation = '';
+                }, 500);
+            }
         }
     }
 }
@@ -757,32 +809,212 @@ function shuffleGallery() {
 
 // Show Hinglish messages
 function showHinglishMessage(message, duration = 3000) {
+    const funnyContainer = document.getElementById('funnyMessages');
+    if (!funnyContainer) return;
+    
     const messageEl = document.createElement('div');
-    messageEl.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, rgba(255, 107, 157, 0.95), rgba(118, 75, 162, 0.95));
-        color: white;
-        padding: 20px 40px;
-        border-radius: 30px;
-        font-size: 1.5rem;
-        font-weight: 700;
-        z-index: 10000;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        animation: messagePop 0.5s ease;
-        pointer-events: none;
-        text-align: center;
-        font-family: 'Poppins', sans-serif;
-    `;
+    messageEl.className = 'funny-message';
     messageEl.textContent = message;
-    document.body.appendChild(messageEl);
+    funnyContainer.appendChild(messageEl);
     
     setTimeout(() => {
         messageEl.style.animation = 'messagePopOut 0.5s ease forwards';
         setTimeout(() => messageEl.remove(), 500);
     }, duration);
+}
+
+// Random funny jokes and messages
+const funnyJokes = [
+    'Birthday hai yaar, aaj diet mat karna! 🍰',
+    'Cake ka size jitna bada, utna accha! 🎂',
+    'Age sirf number hai, party zaroori hai! 🎉',
+    'Aaj tu boss hai, kal dekhenge! 👑',
+    'Birthday wala din, tension nahi leni! 😎',
+    'Candles uda do, wishes zaroori hai! 🕯️',
+    'Aaj tu king hai, baaki sab pawn! ♟️',
+    'Party karo bhai, celebration zaroori hai! 🎊',
+    'Cake cut karo, weight ka baad mein sochna! 🍰',
+    'Happy Birthday! Ab ek aur saal ki khushi! 🎈'
+];
+
+const funnyClickMessages = [
+    'Arey yaar! Phir se? 😂',
+    'Click karne ki addiction hai kya? 🎯',
+    'Haan bhai, aur kar! 💪',
+    'Ek aur click, ek aur surprise! 🎁',
+    'Kitni baar click karega? 😅',
+    'Lagta hai click karna accha lag raha hai! 👆',
+    'Aur click kar, party shuru hai! 🎉',
+    'Click master hai tu bhai! 🏆'
+];
+
+const funnyGalleryMessages = [
+    'Photo dekhi? Mast hai na? 📸',
+    'Yaar photo mein tu legend lag raha hai! 🏆',
+    'Photo dekhega ya aur click karega? 🤔',
+    'Photo dekh ke pura mood ban gaya! 😎',
+    'Photo mein tu hero hai bhai! 🦸'
+];
+
+// Random funny jokes display
+function showRandomJoke() {
+    const jokeText = document.getElementById('jokeText');
+    if (!jokeText) return;
+    
+    const randomJoke = funnyJokes[Math.floor(Math.random() * funnyJokes.length)];
+    jokeText.textContent = randomJoke;
+    jokeText.style.opacity = '0';
+    jokeText.style.transform = 'translateY(10px)';
+    
+    setTimeout(() => {
+        jokeText.style.transition = 'all 0.5s ease';
+        jokeText.style.opacity = '1';
+        jokeText.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Change joke every 5 seconds
+    setTimeout(() => {
+        jokeText.style.opacity = '0';
+        jokeText.style.transform = 'translateY(-10px)';
+        setTimeout(showRandomJoke, 500);
+    }, 5000);
+}
+
+// Easter Egg Function
+function triggerEasterEgg() {
+    showHinglishMessage('🤫 Secret button dhundh liya! Tu toh detective hai! 🕵️', 3000);
+    
+    // Crazy animation on all elements
+    const elements = document.querySelectorAll('.hero-section, .message-card, .gallery-item');
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('crazy-dance');
+            setTimeout(() => el.classList.remove('crazy-dance'), 2000);
+        }, index * 100);
+    });
+    
+    // Create multiple confetti bursts
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            createConfetti();
+            createEmojiRain();
+        }, i * 300);
+    }
+    
+    // Show multiple funny messages
+    const easterMessages = [
+        '🎉 Easter egg mil gaya! 🎉',
+        'Tu toh hidden button dhundh leta hai! 🕵️',
+        'Secret discovered! Ab party shuru! 🎊',
+        'Hidden feature activate! Superstar! ⭐'
+    ];
+    
+    easterMessages.forEach((msg, index) => {
+        setTimeout(() => {
+            showHinglishMessage(msg, 2000);
+        }, index * 800);
+    });
+}
+
+// Random funny jokes and messages
+const funnyJokes = [
+    'Birthday hai yaar, aaj diet mat karna! 🍰',
+    'Cake ka size jitna bada, utna accha! 🎂',
+    'Age sirf number hai, party zaroori hai! 🎉',
+    'Aaj tu boss hai, kal dekhenge! 👑',
+    'Birthday wala din, tension nahi leni! 😎',
+    'Candles uda do, wishes zaroori hai! 🕯️',
+    'Aaj tu king hai, baaki sab pawn! ♟️',
+    'Party karo bhai, celebration zaroori hai! 🎊',
+    'Cake cut karo, weight ka baad mein sochna! 🍰',
+    'Happy Birthday! Ab ek aur saal ki khushi! 🎈'
+];
+
+const funnyClickMessages = [
+    'Arey yaar! Phir se? 😂',
+    'Click karne ki addiction hai kya? 🎯',
+    'Haan bhai, aur kar! 💪',
+    'Ek aur click, ek aur surprise! 🎁',
+    'Kitni baar click karega? 😅',
+    'Lagta hai click karna accha lag raha hai! 👆',
+    'Aur click kar, party shuru hai! 🎉',
+    'Click master hai tu bhai! 🏆'
+];
+
+const funnyGalleryMessages = [
+    'Photo dekhi? Mast hai na? 📸',
+    'Yaar photo mein tu legend lag raha hai! 🏆',
+    'Photo dekhega ya aur click karega? 🤔',
+    'Photo dekh ke pura mood ban gaya! 😎',
+    'Photo mein tu hero hai bhai! 🦸'
+];
+
+// Random funny jokes display
+function showRandomJoke() {
+    const jokeText = document.getElementById('jokeText');
+    if (!jokeText) return;
+    
+    const randomJoke = funnyJokes[Math.floor(Math.random() * funnyJokes.length)];
+    jokeText.textContent = randomJoke;
+    jokeText.style.opacity = '0';
+    jokeText.style.transform = 'translateY(10px)';
+    
+    setTimeout(() => {
+        jokeText.style.transition = 'all 0.5s ease';
+        jokeText.style.opacity = '1';
+        jokeText.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Change joke every 5 seconds
+    setTimeout(() => {
+        jokeText.style.opacity = '0';
+        jokeText.style.transform = 'translateY(-10px)';
+        setTimeout(showRandomJoke, 500);
+    }, 5000);
+}
+
+// Funny click reactions
+function addFunnyClickReaction(element, message) {
+    if (Math.random() > 0.7) { // 30% chance
+        const funnyMsg = funnyClickMessages[Math.floor(Math.random() * funnyClickMessages.length)];
+        showHinglishMessage(funnyMsg, 2000);
+    }
+}
+
+// Easter Egg Function
+function triggerEasterEgg() {
+    showHinglishMessage('🤫 Secret button dhundh liya! Tu toh detective hai! 🕵️', 3000);
+    
+    // Crazy animation on all elements
+    const elements = document.querySelectorAll('.hero-section, .message-card, .gallery-item');
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('crazy-dance');
+            setTimeout(() => el.classList.remove('crazy-dance'), 2000);
+        }, index * 100);
+    });
+    
+    // Create multiple confetti bursts
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            createConfetti();
+            createEmojiRain();
+        }, i * 300);
+    }
+    
+    // Show multiple funny messages
+    const easterMessages = [
+        '🎉 Easter egg mil gaya! 🎉',
+        'Tu toh hidden button dhundh leta hai! 🕵️',
+        'Secret discovered! Ab party shuru! 🎊',
+        'Hidden feature activate! Superstar! ⭐'
+    ];
+    
+    easterMessages.forEach((msg, index) => {
+        setTimeout(() => {
+            showHinglishMessage(msg, 2000);
+        }, index * 800);
+    });
 }
 
 // Add message animations
@@ -868,6 +1100,23 @@ window.addEventListener('load', () => {
     
     // Handle scroll indicator
     handleScrollIndicator();
+    
+    // Start showing random jokes
+    setTimeout(() => showRandomJoke(), 3000);
+    
+    // Random funny messages appearing
+    setInterval(() => {
+        if (Math.random() > 0.7 && !isPartyActive) { // 30% chance, but not during party
+            const randomFunnyMsg = [
+                'Website achhi lag rahi hai na? 😎',
+                'Click karte rehna, aur surprises milenge! 🎁',
+                'Birthday celebration chal raha hai! 🎉',
+                'Kuch aur click karna hai? Try kar! 👆'
+            ];
+            const msg = randomFunnyMsg[Math.floor(Math.random() * randomFunnyMsg.length)];
+            showHinglishMessage(msg, 2500);
+        }
+    }, 15000); // Every 15 seconds
     
     setTimeout(() => {
         createEmojiRain();

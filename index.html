@@ -43,7 +43,8 @@
                 <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA! 🎉</h2>
                 <p class="date clickable-element" onclick="createClickEffect(event)">10th January - Tera Special Day! 🎂</p>
                 <p class="hero-subtitle">Aaj tu superstar hai! 🔥💝</p>
-                <p class="hero-fun-text">Party ka mood hai yaar! 🎉✨</p>
+                <p class="hero-fun-text" id="funnyText">Party ka mood hai yaar! 🎉✨</p>
+                <p class="hero-joke-text" id="jokeText"></p>
             </div>
         </div>
         <div class="cake-container">
@@ -82,6 +83,12 @@
         <div class="scroll-arrow">👇</div>
         <span>Scroll Karo!</span>
     </div>
+    
+    <!-- Funny Random Messages -->
+    <div id="funnyMessages" class="funny-messages"></div>
+    
+    <!-- Easter Egg Button (Hidden) -->
+    <button class="easter-egg-btn" id="easterEgg" onclick="triggerEasterEgg()" title="Secret Button!">🤫</button>
 
     <!-- Main Content -->
     <main class="main-content">
