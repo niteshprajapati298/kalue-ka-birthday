@@ -5,62 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Kalua! 🎉</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- Animated Background -->
-        <div class="balloons">
-            <div class="balloon balloon1">🎈</div>
-            <div class="balloon balloon2">🎈</div>
-            <div class="balloon balloon3">🎈</div>
-            <div class="balloon balloon4">🎈</div>
-            <div class="balloon balloon5">🎈</div>
-            <div class="balloon balloon6">🎈</div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="content">
-            <div class="cake-container">
-                <div class="cake">
-                    <div class="candle">
-                        <div class="flame"></div>
-                    </div>
-                    <div class="frosting"></div>
-                    <div class="cake-base"></div>
-                </div>
-            </div>
-
-            <h1 class="title">Happy Birthday</h1>
-            <h2 class="name">KALUA!</h2>
-            <p class="date">January 10th 🎂</p>
-
-            <div class="message">
-                <p class="wish-text">Wishing you an amazing year filled with</p>
-                <div class="highlights">
-                    <span class="highlight">joy</span>
-                    <span class="highlight">laughter</span>
-                    <span class="highlight">adventures</span>
-                    <span class="highlight">and endless happiness!</span>
-                </div>
-            </div>
-
-            <button class="party-btn" onclick="startParty()">🎊 Click for Party! 🎊</button>
-
-            <div class="emoji-rain">
-                <span class="emoji">🎉</span>
-                <span class="emoji">🎊</span>
-                <span class="emoji">🎁</span>
-                <span class="emoji">🎂</span>
-                <span class="emoji">🎈</span>
-                <span class="emoji">⭐</span>
-                <span class="emoji">✨</span>
-                <span class="emoji">🎀</span>
-            </div>
-        </div>
-
-        <!-- Confetti Canvas -->
-        <canvas id="confetti"></canvas>
+    <!-- Animated Background -->
+    <div class="balloons">
+        <div class="balloon balloon1">🎈</div>
+        <div class="balloon balloon2">🎈</div>
+        <div class="balloon balloon3">🎈</div>
+        <div class="balloon balloon4">🎈</div>
+        <div class="balloon balloon5">🎈</div>
+        <div class="balloon balloon6">🎈</div>
     </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-image-wrapper">
+                <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
+                <div class="image-glow"></div>
+            </div>
+            <div class="hero-text">
+                <h1 class="title">Happy Birthday</h1>
+                <h2 class="name">KALUA!</h2>
+                <p class="date">January 10th 🎂</p>
+            </div>
+        </div>
+        <div class="cake-container">
+            <div class="cake" id="cake">
+                <div class="candle">
+                    <div class="flame"></div>
+                </div>
+                <div class="frosting"></div>
+                <div class="cake-base"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Raining Images Background -->
+    <div class="raining-images" id="rainingImages"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="message-section">
+            <div class="message-card">
+                <h3 class="section-title">🎊 Special Birthday Wishes 🎊</h3>
+                <p class="wish-text">Wishing you an absolutely amazing year filled with</p>
+                <div class="highlights">
+                    <span class="highlight">✨ Joy</span>
+                    <span class="highlight">😄 Laughter</span>
+                    <span class="highlight">🌟 Adventures</span>
+                    <span class="highlight">💝 Endless Happiness</span>
+                </div>
+                <button class="party-btn" onclick="startParty()">
+                    <span>🎊 Click for Party! 🎊</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Photo Gallery Section -->
+        <section class="gallery-section">
+            <h3 class="section-title gallery-title">💖 Beautiful Memories 💖</h3>
+            <div class="gallery-container">
+                <div class="gallery-grid">
+                    <div class="gallery-item shape-circle" data-image="kalu-2.png">
+                        <img src="kalu-2.png" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-hexagon" data-image="image.png">
+                        <img src="image.png" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-diamond" data-image="image-2.png">
+                        <img src="image-2.png" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-star" data-image="image-3.png">
+                        <img src="image-3.png" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-pentagon" data-image="image-8.png">
+                        <img src="image-8.png" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.06.31.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.06.31.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.08.47.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.08.47.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-diamond" data-image="WhatsApp Image 2026-01-09 at 21.11.08.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.11.08.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-star" data-image="WhatsApp Image 2026-01-09 at 21.11.49.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.11.49.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-pentagon" data-image="WhatsApp Image 2026-01-09 at 21.12.39.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.12.39.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.13.07.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.13.07.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.14.06.jpeg">
+                        <img src="WhatsApp Image 2026-01-09 at 21.14.06.jpeg" alt="Memory" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">✨</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox" class="lightbox">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-image" src="" alt="Full size">
+            <button class="lightbox-prev">&#10094;</button>
+            <button class="lightbox-next">&#10095;</button>
+        </div>
+    </main>
+
+    <!-- Emoji Rain -->
+    <div class="emoji-rain"></div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti"></canvas>
 
     <script src="script.js"></script>
 </body>
