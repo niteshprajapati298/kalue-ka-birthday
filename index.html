@@ -9,8 +9,9 @@
 </head>
 <body>
     <!-- Background Music - Auto-playing, no controls -->
-    <audio id="birthdayMusic" loop muted>
+    <audio id="birthdayMusic" loop muted playsinline preload="auto" webkit-playsinline>
         <source src="birthday-audio.mpeg" type="audio/mpeg">
+        <source src="birthday-audio.mp3" type="audio/mp3">
     </audio>
     
     <!-- Page Loader / Entry Animation -->
@@ -24,6 +25,11 @@
                 <span class="loader-step" id="loaderStep3">Party time! 🎊</span>
             </div>
         </div>
+    </div>
+
+    <!-- Subtle Mobile Music Hint (only on mobile, fades quickly) -->
+    <div class="mobile-music-hint" id="mobileMusicHint">
+        <span>🎵 Tap anywhere for music! 🎵</span>
     </div>
 
     <!-- Main Container -->

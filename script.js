@@ -24,56 +24,162 @@ const birthdayMusic = document.getElementById('birthdayMusic');
 let hasUserInteracted = false;
 
 function initAudio() {
-    if (!birthdayMusic) return;
+    if (!birthdayMusic) {
+        console.log('Audio element not found');
+        return;
+    }
     
+    // Set up audio properties
     birthdayMusic.loop = true;
     birthdayMusic.volume = 0;
     birthdayMusic.muted = true;
     
-    birthdayMusic.play().catch(() => {
-        console.log('Autoplay prevented, will start on interaction');
+    // Set crossOrigin for better compatibility (if needed)
+    // birthdayMusic.crossOrigin = 'anonymous';
+    
+    // Try to load audio
+    birthdayMusic.load();
+    
+    // Handle audio loading errors
+    birthdayMusic.addEventListener('error', (e) => {
+        console.log('Audio loading error:', e);
+        // Try alternative source if available
+        const source = birthdayMusic.querySelector('source');
+        if (source && source.src.includes('.mpeg')) {
+            console.log('MPEG format may not be supported, trying alternative...');
+        }
     });
     
-    setTimeout(() => {
-        fadeInAudio();
-    }, 1500);
+    // Log when audio can play (for debugging)
+    birthdayMusic.addEventListener('canplay', () => {
+        console.log('Audio ready to play');
+    });
     
-    const unmuteOnInteraction = () => {
-        if (hasUserInteracted) return;
-        hasUserInteracted = true;
-        birthdayMusic.muted = false;
-        birthdayMusic.play().catch(() => {
-            console.log('Play blocked, will retry on next interaction');
+    // Try muted autoplay (works on desktop, might fail on mobile)
+    const tryAutoplay = () => {
+        birthdayMusic.play().catch((err) => {
+            console.log('Autoplay prevented (normal on mobile), will start on interaction');
         });
-        fadeInAudio();
-        if (!audioCtx) {
-            initAudioViz();
-        } else if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-        document.removeEventListener('click', unmuteOnInteraction);
-        document.removeEventListener('touchstart', unmuteOnInteraction);
-        document.removeEventListener('keydown', unmuteOnInteraction);
     };
     
-    document.addEventListener('click', unmuteOnInteraction, { once: true });
-    document.addEventListener('touchstart', unmuteOnInteraction, { once: true });
-    document.addEventListener('keydown', unmuteOnInteraction, { once: true });
+    // Wait for audio to be ready, then try autoplay
+    birthdayMusic.addEventListener('canplaythrough', tryAutoplay, { once: true });
+    // Also try immediately (might work on desktop)
+    tryAutoplay();
     
+    // User interaction handler - CRITICAL for mobile
+    const unmuteOnInteraction = async (e) => {
+        if (hasUserInteracted) return;
+        hasUserInteracted = true;
+        
+        // Note: Event listeners are set with {once: true} so they auto-remove
+        
+        // CRITICAL: Unmute first, then play - iOS requires this order
+        birthdayMusic.muted = false;
+        
+        // Ensure audio is loaded
+        if (birthdayMusic.readyState < 2) {
+            await birthdayMusic.load();
+        }
+        
+        // Play audio - this MUST happen directly in the user interaction handler for mobile
+        try {
+            const playPromise = birthdayMusic.play();
+            if (playPromise !== undefined) {
+                await playPromise;
+            }
+            // Start fade in after play succeeds
+            fadeInAudio();
+            // Initialize visualizer
+            if (!audioCtx) {
+                initAudioViz();
+            } else if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        } catch (error) {
+            console.log('Play failed, will retry:', error);
+            // Retry on next interaction
+            const retryPlay = async () => {
+                try {
+                    birthdayMusic.muted = false;
+                    await birthdayMusic.play();
+                    fadeInAudio();
+                } catch (err) {
+                    console.log('Retry also failed');
+                }
+                document.removeEventListener('click', retryPlay);
+                document.removeEventListener('touchstart', retryPlay);
+            };
+            document.addEventListener('click', retryPlay, { once: true });
+            document.addEventListener('touchstart', retryPlay, { once: true });
+        }
+    };
+    
+    // Hide mobile hint after user interaction
+    const hideMobileHint = () => {
+        const hint = document.getElementById('mobileMusicHint');
+        if (hint) {
+            hint.classList.add('hidden');
+            setTimeout(() => hint.remove(), 500);
+        }
+    };
+    
+    // Show mobile hint on mobile devices
+    const showMobileHint = () => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
+                        (window.innerWidth <= 768 && 'ontouchstart' in window);
+        if (isMobile) {
+            const hint = document.getElementById('mobileMusicHint');
+            if (hint) {
+                setTimeout(() => {
+                    hint.style.display = 'block';
+                }, 2000); // Show after loader
+            }
+        }
+    };
+    showMobileHint();
+    
+    // Wrapper function to handle interaction and hide hint
+    const handleUserInteraction = async (e) => {
+        hideMobileHint();
+        await unmuteOnInteraction(e);
+    };
+    
+    // Listen for ANY user interaction - crucial for mobile
+    // Using separate listeners that will be removed by unmuteOnInteraction
+    document.addEventListener('click', handleUserInteraction, { once: true, passive: true });
+    document.addEventListener('touchstart', handleUserInteraction, { once: true, passive: true });
+    document.addEventListener('touchend', handleUserInteraction, { once: true, passive: true });
+    document.addEventListener('keydown', handleUserInteraction, { once: true });
+    
+    // Handle audio end (shouldn't happen with loop, but safety net)
     birthdayMusic.addEventListener('ended', () => {
         birthdayMusic.currentTime = 0;
-        birthdayMusic.play();
+        birthdayMusic.play().catch(() => {});
     });
     
+    // Resume when page becomes visible again
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && birthdayMusic.paused) {
-            birthdayMusic.play();
+        if (!document.hidden && birthdayMusic.paused && hasUserInteracted) {
+            birthdayMusic.play().catch(() => {});
+        }
+    });
+    
+    // Handle page focus (helps with mobile)
+    window.addEventListener('focus', () => {
+        if (birthdayMusic.paused && hasUserInteracted) {
+            birthdayMusic.play().catch(() => {});
         }
     });
 }
 
 function fadeInAudio() {
     if (!birthdayMusic || birthdayMusic.muted) return;
+    
+    // Ensure audio is playing before fading in
+    if (birthdayMusic.paused) {
+        birthdayMusic.play().catch(() => {});
+    }
     
     const targetVolume = CONFIG.music.volume;
     const duration = CONFIG.music.fadeInDuration;
@@ -83,6 +189,10 @@ function fadeInAudio() {
     let currentStep = 0;
     
     const fadeInterval = setInterval(() => {
+        if (birthdayMusic.muted || !birthdayMusic) {
+            clearInterval(fadeInterval);
+            return;
+        }
         currentStep++;
         birthdayMusic.volume = Math.min(volumeStep * currentStep, targetVolume);
         
@@ -104,38 +214,67 @@ let audioVizCtx;
 function initAudioViz() {
     const viz = document.getElementById('audioViz');
     if (!viz || !birthdayMusic) return;
-    audioVizCtx = viz.getContext('2d');
-    viz.width = window.innerWidth;
-    viz.height = 120;
     
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioCtx.createMediaElementSource(birthdayMusic);
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 64;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    
-    function draw() {
-        requestAnimationFrame(draw);
-        if (!audioVizCtx || !analyser) return;
-        analyser.getByteFrequencyData(dataArray);
-        audioVizCtx.clearRect(0, 0, viz.width, viz.height);
-        const barWidth = (viz.width / dataArray.length) * 1.5;
-        let x = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            const barHeight = dataArray[i];
-            const grad = audioVizCtx.createLinearGradient(0, viz.height - barHeight, 0, viz.height);
-            grad.addColorStop(0, '#ff6b9d');
-            grad.addColorStop(0.5, '#feca57');
-            grad.addColorStop(1, '#4facfe');
-            audioVizCtx.fillStyle = grad;
-            audioVizCtx.fillRect(x, viz.height - barHeight, barWidth, barHeight);
-            x += barWidth + 2;
+    try {
+        audioVizCtx = viz.getContext('2d');
+        viz.width = window.innerWidth;
+        viz.height = 120;
+        
+        // Create AudioContext only after user interaction (required for mobile)
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Resume AudioContext if suspended (mobile browsers often suspend initially)
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {
+                console.log('AudioContext resume failed');
+            });
         }
+        
+        // Only create visualizer if AudioContext is supported and audio is playing
+        if (!birthdayMusic.paused && !birthdayMusic.muted) {
+            // Wait a bit for audio to start
+            setTimeout(() => {
+                try {
+                    const source = audioCtx.createMediaElementSource(birthdayMusic);
+                    analyser = audioCtx.createAnalyser();
+                    analyser.fftSize = 64;
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    
+                    source.connect(analyser);
+                    analyser.connect(audioCtx.destination);
+                    
+                    function draw() {
+                        requestAnimationFrame(draw);
+                        if (!audioVizCtx || !analyser || !dataArray) return;
+                        
+                        try {
+                            analyser.getByteFrequencyData(dataArray);
+                            audioVizCtx.clearRect(0, 0, viz.width, viz.height);
+                            const barWidth = (viz.width / dataArray.length) * 1.5;
+                            let x = 0;
+                            for (let i = 0; i < dataArray.length; i++) {
+                                const barHeight = dataArray[i];
+                                const grad = audioVizCtx.createLinearGradient(0, viz.height - barHeight, 0, viz.height);
+                                grad.addColorStop(0, '#ff6b9d');
+                                grad.addColorStop(0.5, '#feca57');
+                                grad.addColorStop(1, '#4facfe');
+                                audioVizCtx.fillStyle = grad;
+                                audioVizCtx.fillRect(x, viz.height - barHeight, barWidth, barHeight);
+                                x += barWidth + 2;
+                            }
+                        } catch (err) {
+                            // Silently fail if visualizer has issues
+                        }
+                    }
+                    draw();
+                } catch (err) {
+                    console.log('Audio visualizer setup failed (may not work on all devices)');
+                }
+            }, 500);
+        }
+    } catch (err) {
+        console.log('Audio visualizer initialization failed');
     }
-    draw();
 }
 
 /* ============================================
