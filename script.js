@@ -716,6 +716,16 @@ const funnyMessages = {
     ]
 };
 
+const lovingInsults = [
+    'Abe ओवरएक्टिंग स्टार, फिर आ गया! 🤪',
+    'Tu drama king/queen hai, but humko pasand hai! 😎',
+    'Smart toh hai, par thoda pagal bhi. ❤️',
+    'Kitna nautanki karega? Phir bhi cute lagta hai. 🫶',
+    'Red Bull piya kya? Hyper ho raha hai! 🪽'
+];
+
+const chaosEmojis = ['🤪','😜','🤡','🌀','🎭','🙃','🦄','🔥','🍭','🚀'];
+
 /* ============================================
    INTERACTIVE ELEMENTS
    ============================================ */
@@ -991,6 +1001,65 @@ function initCustomCursor() {
 }
 
 /* ============================================
+   CHAOS ENGINE: RANDOM SURPRISES
+   ============================================ */
+function showChaosMessage(msg) {
+    const container = document.getElementById('funnyMessages');
+    if (!container) return;
+    const el = document.createElement('div');
+    el.className = 'chaos-message';
+    el.textContent = msg;
+    container.appendChild(el);
+    setTimeout(() => {
+        el.style.animation = 'messagePopOut 0.4s ease forwards';
+        setTimeout(() => el.remove(), 400);
+    }, 1800);
+}
+
+function interruptText() {
+    const subtitle = document.getElementById('subtitleText');
+    if (!subtitle) return;
+    const original = subtitle.textContent;
+    const random = lovingInsults[Math.floor(Math.random() * lovingInsults.length)];
+    subtitle.textContent = random;
+    subtitle.classList.add('wiggle');
+    setTimeout(() => {
+        subtitle.textContent = original;
+        subtitle.classList.remove('wiggle');
+    }, 2000);
+}
+
+function makeEmojisMisbehave() {
+    const emojiLetters = document.querySelectorAll('.emoji-letter');
+    emojiLetters.forEach(el => {
+        const dx = (Math.random() - 0.5) * 40;
+        const dy = (Math.random() - 0.5) * 30;
+        const spin = (Math.random() - 0.5) * 40;
+        el.style.display = 'inline-block';
+        el.style.transition = 'transform 0.5s ease';
+        el.style.transform = `translate(${dx}px, ${dy}px) rotate(${spin}deg)`;
+        setTimeout(() => {
+            el.style.transform = '';
+        }, 1200);
+    });
+}
+
+function randomChaosLoop() {
+    const actions = [
+        () => showChaosMessage(lovingInsults[Math.floor(Math.random() * lovingInsults.length)]),
+        () => showChaosMessage(funnyMessages.click[Math.floor(Math.random() * funnyMessages.click.length)]),
+        () => interruptText(),
+        () => makeEmojisMisbehave(),
+        () => createConfettiBurst()
+    ];
+    
+    setInterval(() => {
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        action();
+    }, 6000);
+}
+
+/* ============================================
    INITIALIZATION
    ============================================ */
 window.addEventListener('load', () => {
@@ -1012,6 +1081,7 @@ window.addEventListener('load', () => {
     initGlitchEffect();
     initCustomCursor();
     initScrollSystems();
+    randomChaosLoop();
     
     // Start confetti animation loop
     animateConfetti();

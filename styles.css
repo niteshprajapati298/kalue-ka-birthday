@@ -1253,6 +1253,46 @@ body {
     }
 }
 
+.chaos-message {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8) rotate(-2deg);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(18px);
+    border: 2px dashed rgba(255, 255, 255, 0.6);
+    color: #fff;
+    padding: 18px 26px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-medium);
+    animation: chaosPop 0.6s ease, chaosFloat 3s ease-in-out infinite;
+    z-index: 12000;
+    pointer-events: none;
+}
+
+@keyframes chaosPop {
+    0% { opacity: 0; transform: translateX(-50%) scale(0.2) rotate(-10deg); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); }
+}
+
+@keyframes chaosFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+    50% { transform: translateX(-50%) translateY(-8px) scale(1.05); }
+}
+
+.wiggle {
+    animation: wiggle 0.5s ease-in-out;
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-4deg) scale(1.03); }
+    50% { transform: rotate(4deg) scale(1.05); }
+    75% { transform: rotate(-3deg) scale(1.03); }
+    100% { transform: rotate(0deg) scale(1); }
+}
 /* ============================================
    LIGHTBOX
    ============================================ */
