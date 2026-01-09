@@ -5,208 +5,214 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Kalua! 🎉</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Background Music -->
-    <audio id="birthdayMusic" loop autoplay>
-        <source src="birthday-audio.mpeg" type="audio/mpeg">
+    <!-- Background Music - Auto-playing, no controls -->
+    <audio id="birthdayMusic" loop muted>
         <source src="birthday-audio.mpeg" type="audio/mpeg">
     </audio>
     
-    <!-- Music Control Button -->
-    <button class="music-control" id="musicToggle" onclick="toggleMusic()" title="Music on/off">
-        <span class="music-icon">🎵</span>
-        <span class="music-text">Gaana ON Hai</span>
-    </button>
-    <!-- Animated Background -->
-    <div class="balloons">
-        <div class="balloon balloon1">🎈</div>
-        <div class="balloon balloon2">🎈</div>
-        <div class="balloon balloon3">🎈</div>
-        <div class="balloon balloon4">🎈</div>
-        <div class="balloon balloon5">🎈</div>
-        <div class="balloon balloon6">🎈</div>
+    <!-- Page Loader / Entry Animation -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-text" id="loaderText">🎉</div>
+            <div class="loader-progress"></div>
+        </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="hero-image-wrapper clickable-element" onclick="createClickEffect(event); surpriseHeroClick()">
-                <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
-                <div class="image-glow"></div>
-                <div class="click-indicator">👆 Yaar click kar, surprise milega! 👆</div>
-                <div class="click-counter" id="heroClickCounter">Kitne Baar Click Kiya: 0</div>
+    <!-- Main Container -->
+    <div class="app-container" id="appContainer">
+        <!-- Animated Background -->
+        <div class="animated-background">
+            <div class="balloons">
+                <div class="balloon balloon1">🎈</div>
+                <div class="balloon balloon2">🎈</div>
+                <div class="balloon balloon3">🎈</div>
+                <div class="balloon balloon4">🎈</div>
+                <div class="balloon balloon5">🎈</div>
+                <div class="balloon balloon6">🎈</div>
             </div>
-            <div class="hero-text">
-                <h1 class="title clickable-element">Janmdin Mubarak Ho Yaar! 🎊</h1>
-                <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA! 🎉</h2>
-                <p class="date clickable-element" onclick="createClickEffect(event)">10th January - Tera Special Day! 🎂</p>
-                <p class="hero-subtitle">Aaj tu superstar hai! 🔥💝</p>
-                <p class="hero-fun-text" id="funnyText">Party ka mood hai yaar! 🎉✨</p>
-                <p class="hero-joke-text" id="jokeText"></p>
+            
+            <!-- Floating Particles -->
+            <div class="particles" id="particles"></div>
+            
+            <!-- Floating Decorative Elements -->
+            <div class="floating-elements">
+                <div class="floating-star star1">⭐</div>
+                <div class="floating-star star2">✨</div>
+                <div class="floating-star star3">💫</div>
+                <div class="floating-star star4">🌟</div>
+                <div class="floating-heart heart1">💖</div>
+                <div class="floating-heart heart2">💝</div>
             </div>
         </div>
-        <div class="cake-container">
-            <div class="cake clickable-element" id="cake" onclick="createClickEffect(event); blowCandle()">
-                <div class="candle">
-                    <div class="flame" id="flame"></div>
+
+        <!-- Raining Images Background -->
+        <div class="raining-images" id="rainingImages"></div>
+
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-content">
+                <!-- Confetti Burst on Load -->
+                <div class="confetti-burst" id="confettiBurst"></div>
+                
+                <div class="hero-image-wrapper" id="heroImageWrapper">
+                    <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
+                    <div class="image-glow"></div>
+                    <div class="image-ring"></div>
                 </div>
-                <div class="frosting"></div>
-                <div class="cake-base"></div>
-                <div class="cake-hint">🎂 Bhai candle blow karni hai? Click maar! 🎂</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Raining Images Background -->
-    <div class="raining-images" id="rainingImages"></div>
-    
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- Floating Decorative Elements -->
-    <div class="floating-elements">
-        <div class="floating-star star1">⭐</div>
-        <div class="floating-star star2">✨</div>
-        <div class="floating-star star3">💫</div>
-        <div class="floating-star star4">🌟</div>
-        <div class="floating-star star5">⭐</div>
-        <div class="floating-star star6">✨</div>
-        <div class="floating-heart heart1">💖</div>
-        <div class="floating-heart heart2">💝</div>
-        <div class="floating-heart heart3">💗</div>
-    </div>
-    
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-        <div class="scroll-arrow">👇</div>
-        <span>Scroll Karo!</span>
-    </div>
-    
-    <!-- Funny Random Messages -->
-    <div id="funnyMessages" class="funny-messages"></div>
-    
-    <!-- Easter Egg Button (Hidden) -->
-    <button class="easter-egg-btn" id="easterEgg" onclick="triggerEasterEgg()" title="Secret Button!">🤫</button>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="message-section">
-            <div class="message-card">
-                <h3 class="section-title clickable-element" onclick="createClickEffect(event)">🎊 Birthday Wishes - Dil Se! 🎊</h3>
-                <p class="wish-text">Bro, tera birthday hai toh ekdum mast wishes chahiye na! Tere liye chahte hain:</p>
-                <div class="highlights">
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">✨ Zindagi Bhar Khushi</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">😄 Hasna-Rona Dono</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">🌟 Naye Naye Adventures</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">💝 Doston Ke Saath Fun</span>
+                
+                <div class="hero-text">
+                    <h1 class="title" id="titleText">
+                        <span class="letter">J</span><span class="letter">a</span><span class="letter">n</span><span class="letter">m</span><span class="letter">d</span><span class="letter">i</span><span class="letter">n</span>
+                        <span class="letter">M</span><span class="letter">u</span><span class="letter">b</span><span class="letter">a</span><span class="letter">r</span><span class="letter">a</span><span class="letter">k</span>
+                        <span class="letter">H</span><span class="letter">o</span>
+                        <span class="emoji-letter">🎊</span>
+                    </h1>
+                    <h2 class="name" id="nameText">
+                        <span class="letter">K</span><span class="letter">A</span><span class="letter">L</span><span class="letter">U</span><span class="letter">A</span>
+                        <span class="emoji-letter">🎉</span>
+                    </h2>
+                    <p class="date" id="dateText">10th January - Tera Special Day! 🎂</p>
+                    <p class="hero-subtitle" id="subtitleText">Aaj tu superstar hai! 🔥💝</p>
                 </div>
-                <div class="click-hint hinglish-instruction">👆 Kuch bhi click kar bhai, magic hoga pakka! 👆</div>
-                <div class="hinglish-instruction fun-instruction">💡 Yaar sab kuch click kar, har jagah kuch na kuch surprise hai! Try kar! 💡</div>
-                <button class="party-btn" onclick="startParty()">
-                    <span>🎊 Ab Party Shuru Karte Hain! 🎊</span>
-                </button>
             </div>
-        </div>
-
-        <!-- Photo Gallery Section -->
-        <section class="gallery-section">
-            <h3 class="section-title gallery-title clickable-element" onclick="createClickEffect(event); shuffleGallery()">💖 Yaadein - Kuch Fun Wali! 💖</h3>
-            <div class="hinglish-instruction gallery-instruction">📸 Bro photo par click kar, bada wala dikh jayega! Zoom in! 📸</div>
-            <div class="hinglish-instruction shuffle-hint">🔄 Title ko click kar, photos ka shuffle match ho jayega! Try kar! 🔄</div>
-            <div class="gallery-container">
-                <div class="gallery-grid">
-                    <div class="gallery-item shape-circle" data-image="kalu-2.png">
-                        <img src="kalu-2.png" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
+            
+            <div class="cake-container" id="cakeContainer">
+                <div class="cake" id="cake">
+                    <div class="candle">
+                        <div class="flame" id="flame"></div>
                     </div>
-                    <div class="gallery-item shape-hexagon" data-image="image.png">
-                        <img src="image.png" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-diamond" data-image="image-2.png">
-                        <img src="image-2.png" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-star" data-image="image-3.png">
-                        <img src="image-3.png" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-pentagon" data-image="image-8.png">
-                        <img src="image-8.png" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.06.31.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.06.31.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.08.47.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.08.47.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-diamond" data-image="WhatsApp Image 2026-01-09 at 21.11.08.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.11.08.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-star" data-image="WhatsApp Image 2026-01-09 at 21.11.49.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.11.49.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-pentagon" data-image="WhatsApp Image 2026-01-09 at 21.12.39.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.12.39.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.13.07.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.13.07.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.14.06.jpeg">
-                        <img src="WhatsApp Image 2026-01-09 at 21.14.06.jpeg" alt="Memory" loading="lazy">
-                        <div class="gallery-overlay">
-                            <span class="gallery-icon">✨</span>
-                        </div>
-                    </div>
+                    <div class="frosting"></div>
+                    <div class="cake-base"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Lightbox Modal -->
-        <div id="lightbox" class="lightbox">
-            <span class="lightbox-close">&times;</span>
-            <img class="lightbox-image" src="" alt="Full size">
-            <button class="lightbox-prev">&#10094;</button>
-            <button class="lightbox-next">&#10095;</button>
-        </div>
-    </main>
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Message Section -->
+            <section class="message-section">
+                <div class="message-card">
+                    <h3 class="section-title">🎊 Birthday Wishes - Dil Se! 🎊</h3>
+                    <p class="wish-text">Bro, tera birthday hai toh ekdum mast wishes chahiye na! Tere liye chahte hain:</p>
+                    <div class="highlights">
+                        <span class="highlight">✨ Zindagi Bhar Khushi</span>
+                        <span class="highlight">😄 Hasna-Rona Dono</span>
+                        <span class="highlight">🌟 Naye Naye Adventures</span>
+                        <span class="highlight">💝 Doston Ke Saath Fun</span>
+                    </div>
+                    <button class="party-btn" id="partyBtn">
+                        <span>🎊 Ab Party Shuru Karte Hain! 🎊</span>
+                    </button>
+                </div>
+            </section>
 
-    <!-- Emoji Rain -->
-    <div class="emoji-rain"></div>
+            <!-- Photo Gallery Section -->
+            <section class="gallery-section">
+                <h3 class="section-title gallery-title">💖 Yaadein - Kuch Fun Wali! 💖</h3>
+                <div class="gallery-container">
+                    <div class="gallery-grid" id="galleryGrid">
+                        <div class="gallery-item shape-circle" data-image="kalu-2.png">
+                            <img src="kalu-2.png" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-hexagon" data-image="image.png">
+                            <img src="image.png" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-diamond" data-image="image-2.png">
+                            <img src="image-2.png" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-star" data-image="image-3.png">
+                            <img src="image-3.png" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-pentagon" data-image="image-8.png">
+                            <img src="image-8.png" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.06.31.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.06.31.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.08.47.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.08.47.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-diamond" data-image="WhatsApp Image 2026-01-09 at 21.11.08.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.11.08.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-star" data-image="WhatsApp Image 2026-01-09 at 21.11.49.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.11.49.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-pentagon" data-image="WhatsApp Image 2026-01-09 at 21.12.39.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.12.39.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-circle" data-image="WhatsApp Image 2026-01-09 at 21.13.07.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.13.07.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item shape-hexagon" data-image="WhatsApp Image 2026-01-09 at 21.14.06.jpeg">
+                            <img src="WhatsApp Image 2026-01-09 at 21.14.06.jpeg" alt="Memory" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="gallery-icon">✨</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Confetti Canvas -->
-    <canvas id="confetti"></canvas>
+            <!-- Ending Message -->
+            <section class="ending-section">
+                <div class="ending-card">
+                    <p class="ending-text">Made with ❤️ just for you</p>
+                    <p class="ending-subtext">Hope you have an amazing year ahead!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confetti"></canvas>
+        
+        <!-- Funny Messages Container -->
+        <div id="funnyMessages" class="funny-messages"></div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-image" src="" alt="Full size">
+        <button class="lightbox-prev">&#10094;</button>
+        <button class="lightbox-next">&#10095;</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
