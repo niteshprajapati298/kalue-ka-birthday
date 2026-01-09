@@ -21,23 +21,26 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
-            <div class="hero-image-wrapper">
+            <div class="hero-image-wrapper clickable-element" onclick="createClickEffect(event); surpriseHeroClick()">
                 <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
                 <div class="image-glow"></div>
+                <div class="click-indicator">👆 Click me! 👆</div>
+                <div class="click-counter" id="heroClickCounter">Clicks: 0</div>
             </div>
             <div class="hero-text">
-                <h1 class="title">Happy Birthday</h1>
-                <h2 class="name">KALUA!</h2>
-                <p class="date">January 10th 🎂</p>
+                <h1 class="title clickable-element">Happy Birthday</h1>
+                <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA!</h2>
+                <p class="date clickable-element" onclick="createClickEffect(event)">January 10th 🎂</p>
             </div>
         </div>
         <div class="cake-container">
-            <div class="cake" id="cake">
+            <div class="cake clickable-element" id="cake" onclick="createClickEffect(event); blowCandle()">
                 <div class="candle">
-                    <div class="flame"></div>
+                    <div class="flame" id="flame"></div>
                 </div>
                 <div class="frosting"></div>
                 <div class="cake-base"></div>
+                <div class="cake-hint">🎂 Click to blow candle!</div>
             </div>
         </div>
     </section>
@@ -49,14 +52,15 @@
     <main class="main-content">
         <div class="message-section">
             <div class="message-card">
-                <h3 class="section-title">🎊 Special Birthday Wishes 🎊</h3>
+                <h3 class="section-title clickable-element" onclick="createClickEffect(event)">🎊 Special Birthday Wishes 🎊</h3>
                 <p class="wish-text">Wishing you an absolutely amazing year filled with</p>
                 <div class="highlights">
-                    <span class="highlight">✨ Joy</span>
-                    <span class="highlight">😄 Laughter</span>
-                    <span class="highlight">🌟 Adventures</span>
-                    <span class="highlight">💝 Endless Happiness</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">✨ Joy</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">😄 Laughter</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">🌟 Adventures</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">💝 Endless Happiness</span>
                 </div>
+                <div class="click-hint">👆 Click on anything to see magic! 👆</div>
                 <button class="party-btn" onclick="startParty()">
                     <span>🎊 Click for Party! 🎊</span>
                 </button>
@@ -65,7 +69,7 @@
 
         <!-- Photo Gallery Section -->
         <section class="gallery-section">
-            <h3 class="section-title gallery-title">💖 Beautiful Memories 💖</h3>
+            <h3 class="section-title gallery-title clickable-element" onclick="createClickEffect(event); shuffleGallery()">💖 Beautiful Memories 💖</h3>
             <div class="gallery-container">
                 <div class="gallery-grid">
                     <div class="gallery-item shape-circle" data-image="kalu-2.png">

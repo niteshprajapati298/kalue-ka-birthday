@@ -492,7 +492,7 @@ function addCursorFollower() {
     });
     
     // Add hover effects
-    const interactiveElements = document.querySelectorAll('button, .gallery-item, .hero-image-wrapper');
+    const interactiveElements = document.querySelectorAll('button, .gallery-item, .hero-image-wrapper, .clickable-element, .clickable-badge');
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
             cursor.classList.add('cursor-hover');
@@ -502,6 +502,156 @@ function addCursorFollower() {
         });
     });
 }
+
+// Click ripple effect
+function createClickEffect(event) {
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+    
+    // Create ripple
+    const ripple = document.createElement('div');
+    ripple.className = 'click-ripple';
+    ripple.style.left = clickX + 'px';
+    ripple.style.top = clickY + 'px';
+    document.body.appendChild(ripple);
+    
+    // Create pop text
+    const popTexts = ['🎉', '✨', '🎊', '⭐', '💫', '🎈', '🎁', '🌟'];
+    const popText = document.createElement('div');
+    popText.className = 'click-pop';
+    popText.textContent = popTexts[Math.floor(Math.random() * popTexts.length)];
+    popText.style.left = clickX + 'px';
+    popText.style.top = clickY + 'px';
+    document.body.appendChild(popText);
+    
+    // Remove elements after animation
+    setTimeout(() => {
+        ripple.remove();
+        popText.remove();
+    }, 1000);
+    
+    // Add clicked class to target
+    if (event.target.classList.contains('clickable-element') || 
+        event.target.classList.contains('clickable-badge') ||
+        event.target.closest('.clickable-element')) {
+        const target = event.target.closest('.clickable-element') || event.target;
+        target.classList.add('clicked');
+        setTimeout(() => target.classList.remove('clicked'), 600);
+    }
+}
+
+// Badge animation
+function animateBadge(element) {
+    element.classList.add('clicked');
+    setTimeout(() => element.classList.remove('clicked'), 500);
+}
+
+// Candle blow effect
+let candleBlown = false;
+function blowCandle() {
+    const flame = document.getElementById('flame');
+    if (!flame || candleBlown) return;
+    
+    candleBlown = true;
+    flame.classList.add('blown');
+    
+    // Create celebration effect
+    setTimeout(() => {
+        createConfetti();
+        createEmojiRain();
+        animateConfetti();
+        isPartyActive = true;
+        
+        setTimeout(() => {
+            isPartyActive = false;
+            candleBlown = false;
+            flame.classList.remove('blown');
+        }, 5000);
+    }, 500);
+}
+
+// Hero image surprise click
+let heroClickCount = 0;
+function surpriseHeroClick() {
+    heroClickCount++;
+    const heroImage = document.getElementById('heroImage');
+    const clickCounter = document.getElementById('heroClickCounter');
+    
+    // Update click counter
+    if (clickCounter) {
+        clickCounter.textContent = `Clicks: ${heroClickCount}`;
+        clickCounter.classList.add('show');
+        setTimeout(() => {
+            clickCounter.classList.remove('show');
+        }, 2000);
+    }
+    
+    // Change image immediately
+    cycleHeroImage();
+    
+    // Special effects based on click count
+    if (heroClickCount % 5 === 0) {
+        // Every 5 clicks, do something special
+        startParty();
+        if (clickCounter) {
+            clickCounter.textContent = `🎉 ${heroClickCount} CLICKS! PARTY TIME! 🎉`;
+            clickCounter.style.background = 'rgba(255, 107, 157, 0.95)';
+            setTimeout(() => {
+                clickCounter.style.background = 'rgba(118, 75, 162, 0.95)';
+            }, 3000);
+        }
+    } else {
+        // Spin effect
+        if (heroImage) {
+            heroImage.style.animation = 'spin 0.5s ease';
+            setTimeout(() => {
+                heroImage.style.animation = '';
+            }, 500);
+        }
+    }
+}
+
+// Gallery shuffle
+function shuffleGallery() {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+    
+    const items = Array.from(galleryGrid.children);
+    
+    // Shuffle array
+    for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+    }
+    
+    // Add shuffle animation
+    items.forEach((item, index) => {
+        item.style.animation = 'fadeInUp 0.5s ease-out';
+        item.style.animationDelay = (index * 0.1) + 's';
+        galleryGrid.appendChild(item);
+    });
+    
+    // Create confetti
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const clickX = Math.random() * window.innerWidth;
+            const clickY = Math.random() * window.innerHeight;
+            const fakeEvent = { clientX: clickX, clientY: clickY };
+            createClickEffect(fakeEvent);
+        }, i * 50);
+    }
+}
+
+// Add spin animation
+const spinStyle = document.createElement('style');
+spinStyle.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(180deg) scale(1.2); }
+        to { transform: rotate(360deg) scale(1); }
+    }
+`;
+document.head.appendChild(spinStyle);
 
 // Add some floating emojis on page load
 window.addEventListener('load', () => {
@@ -539,7 +689,31 @@ window.addEventListener('load', () => {
     // Observe gallery items
     galleryItems.forEach(item => {
         observer.observe(item);
+        
+        // Add click effect to gallery items
+        item.addEventListener('click', (e) => {
+            if (e.target.closest('.gallery-overlay')) return; // Don't trigger if clicking overlay
+            
+            item.classList.add('clicked');
+            setTimeout(() => item.classList.remove('clicked'), 400);
+            createClickEffect(e);
+        });
     });
+    
+    // Make title clickable
+    const title = document.querySelector('.title');
+    if (title) {
+        title.addEventListener('click', (e) => {
+            createClickEffect(e);
+            // Random color change
+            const colors = ['#8B1E3F', '#B8860B', '#1E3A8A', '#4B0082', '#8B0000', '#006400'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            title.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+            setTimeout(() => {
+                title.style.filter = '';
+            }, 1000);
+        });
+    }
 });
 
 // Add random sparkle effects

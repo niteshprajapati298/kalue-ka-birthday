@@ -138,7 +138,7 @@ body {
 .title {
     font-family: 'Dancing Script', cursive;
     font-size: clamp(3rem, 8vw, 5rem);
-    background: linear-gradient(45deg, #ff6b9d, #feca57, #4facfe, #764ba2);
+    background: linear-gradient(45deg, #8B1E3F, #B8860B, #1E3A8A, #4B0082);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -146,7 +146,8 @@ body {
     animation: gradientText 3s ease infinite;
     margin-bottom: 10px;
     font-weight: 700;
-    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4));
 }
 
 @keyframes gradientText {
@@ -158,14 +159,22 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: clamp(3.5rem, 10vw, 6rem);
     font-weight: 800;
-    color: #fff;
+    color: #1a1a1a;
     margin-bottom: 15px;
     text-shadow: 
         4px 4px 0px #feca57,
-        8px 8px 20px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(255, 107, 157, 0.5);
+        6px 6px 0px #ff6b9d,
+        8px 8px 20px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.8);
     animation: pulse 2s ease-in-out infinite;
     letter-spacing: 3px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.name:hover {
+    transform: scale(1.1) rotate(-2deg);
+    color: #000;
 }
 
 @keyframes pulse {
@@ -175,15 +184,25 @@ body {
 
 .date {
     font-size: clamp(1.5rem, 4vw, 2.2rem);
-    color: #fff;
-    font-weight: 600;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    background: rgba(255, 255, 255, 0.2);
+    color: #2d2d2d;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     padding: 15px 30px;
     border-radius: 50px;
     display: inline-block;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(118, 75, 162, 0.6);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.date:hover {
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 12px 30px rgba(118, 75, 162, 0.5);
+    color: #000;
 }
 
 /* Cake Animation */
@@ -296,16 +315,26 @@ body {
 .section-title {
     font-family: 'Dancing Script', cursive;
     font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--accent-purple);
+    color: #4B0082;
     margin-bottom: 30px;
     font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.section-title:hover {
+    transform: scale(1.05);
+    color: #5a1a9a;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .wish-text {
     font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    color: #555;
+    color: #2d2d2d;
     margin-bottom: 30px;
     line-height: 1.8;
+    font-weight: 600;
 }
 
 .highlights {
@@ -326,12 +355,34 @@ body {
     box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
     animation: highlightFloat 3s ease-in-out infinite;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: default;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.clickable-badge {
+    cursor: pointer !important;
 }
 
 .highlight:hover {
     transform: translateY(-5px) scale(1.05);
     box-shadow: 0 12px 30px rgba(118, 75, 162, 0.6);
+}
+
+.highlight:active,
+.clickable-badge:active {
+    transform: translateY(-2px) scale(0.95);
+    box-shadow: 0 5px 15px rgba(118, 75, 162, 0.8);
+}
+
+.highlight.clicked {
+    animation: badgePop 0.5s ease;
+}
+
+@keyframes badgePop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3) rotate(5deg); }
+    100% { transform: scale(1); }
 }
 
 .highlight:nth-child(1) { animation-delay: 0s; }
@@ -416,7 +467,19 @@ body {
     text-align: center;
     margin-bottom: 50px;
     color: #fff;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.7),
+        0 0 20px rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gallery-title:hover {
+    transform: scale(1.1);
+    text-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(255, 255, 255, 0.7);
 }
 
 .gallery-container {
@@ -440,6 +503,20 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeInUp 0.6s ease-out both;
     transform-style: preserve-3d;
+}
+
+.gallery-item:active {
+    transform: scale(0.95) !important;
+}
+
+.gallery-item.clicked {
+    animation: galleryPop 0.4s ease;
+}
+
+@keyframes galleryPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1) rotate(5deg); }
+    100% { transform: scale(1); }
 }
 
 /* Different Shapes for Gallery Items */
@@ -723,6 +800,167 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Clickable Elements */
+.clickable-element {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.clickable-element:active {
+    transform: scale(0.95);
+}
+
+.click-indicator {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 107, 157, 0.9);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: bounceHint 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.click-counter {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(118, 75, 162, 0.95);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.click-counter.show {
+    opacity: 1;
+    animation: counterPop 0.3s ease;
+}
+
+@keyframes counterPop {
+    0% { transform: translateX(-50%) scale(0.8); }
+    50% { transform: translateX(-50%) scale(1.1); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bounceHint {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+.cake-hint {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(254, 202, 87, 0.95);
+    color: #2d2d2d;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: bounceHint 2s ease-in-out infinite 0.5s;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.click-hint {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(118, 75, 162, 0.1), rgba(255, 107, 157, 0.1));
+    border: 2px dashed rgba(118, 75, 162, 0.5);
+    border-radius: 15px;
+    color: #4B0082;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    animation: pulseHint 2s ease-in-out infinite;
+}
+
+@keyframes pulseHint {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* Click Ripple Effect */
+.click-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Click Pop Effect */
+.click-pop {
+    position: fixed;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #feca57;
+    pointer-events: none;
+    z-index: 10000;
+    animation: popUp 1s ease-out forwards;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes popUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50px) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1);
+    }
+}
+
+/* Candle Blow Effect */
+.flame.blown {
+    animation: blowOut 0.5s ease-out forwards;
+}
+
+@keyframes blowOut {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0) translateY(10px);
     }
 }
 
