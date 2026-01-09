@@ -35,14 +35,15 @@
             <div class="hero-image-wrapper clickable-element" onclick="createClickEffect(event); surpriseHeroClick()">
                 <img src="kalaua.png" alt="Kalua" class="hero-image" id="heroImage">
                 <div class="image-glow"></div>
-                <div class="click-indicator">👆 Click kar ke dekho kya hota hai! 👆</div>
-                <div class="click-counter" id="heroClickCounter">Clicks: 0</div>
+                <div class="click-indicator">👆 Yaar click kar, surprise milega! 👆</div>
+                <div class="click-counter" id="heroClickCounter">Kitne Baar Click Kiya: 0</div>
             </div>
             <div class="hero-text">
-                <h1 class="title clickable-element">Janmdin Mubarak Ho!</h1>
+                <h1 class="title clickable-element">Janmdin Mubarak Ho Yaar! 🎊</h1>
                 <h2 class="name clickable-element" onclick="createClickEffect(event)">KALUA! 🎉</h2>
-                <p class="date clickable-element" onclick="createClickEffect(event)">10th January 🎂</p>
-                <p class="hero-subtitle">Aaj tera special din hai! 💝</p>
+                <p class="date clickable-element" onclick="createClickEffect(event)">10th January - Tera Special Day! 🎂</p>
+                <p class="hero-subtitle">Aaj tu superstar hai! 🔥💝</p>
+                <p class="hero-fun-text">Party ka mood hai yaar! 🎉✨</p>
             </div>
         </div>
         <div class="cake-container">
@@ -52,39 +53,61 @@
                 </div>
                 <div class="frosting"></div>
                 <div class="cake-base"></div>
-                <div class="cake-hint">🎂 Candle ko blow karna hai? Click kar! 🎂</div>
+                <div class="cake-hint">🎂 Bhai candle blow karni hai? Click maar! 🎂</div>
             </div>
         </div>
     </section>
 
     <!-- Raining Images Background -->
     <div class="raining-images" id="rainingImages"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Floating Decorative Elements -->
+    <div class="floating-elements">
+        <div class="floating-star star1">⭐</div>
+        <div class="floating-star star2">✨</div>
+        <div class="floating-star star3">💫</div>
+        <div class="floating-star star4">🌟</div>
+        <div class="floating-star star5">⭐</div>
+        <div class="floating-star star6">✨</div>
+        <div class="floating-heart heart1">💖</div>
+        <div class="floating-heart heart2">💝</div>
+        <div class="floating-heart heart3">💗</div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-arrow">👇</div>
+        <span>Scroll Karo!</span>
+    </div>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="message-section">
             <div class="message-card">
-                <h3 class="section-title clickable-element" onclick="createClickEffect(event)">🎊 Special Birthday Wishes 🎊</h3>
-                <p class="wish-text">Wishing you an absolutely amazing year filled with</p>
+                <h3 class="section-title clickable-element" onclick="createClickEffect(event)">🎊 Birthday Wishes - Dil Se! 🎊</h3>
+                <p class="wish-text">Bro, tera birthday hai toh ekdum mast wishes chahiye na! Tere liye chahte hain:</p>
                 <div class="highlights">
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">✨ Joy</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">😄 Laughter</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">🌟 Adventures</span>
-                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">💝 Endless Happiness</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">✨ Zindagi Bhar Khushi</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">😄 Hasna-Rona Dono</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">🌟 Naye Naye Adventures</span>
+                    <span class="highlight clickable-badge" onclick="createClickEffect(event); animateBadge(this)">💝 Doston Ke Saath Fun</span>
                 </div>
-                <div class="click-hint hinglish-instruction">👆 Kuch bhi click kar, magic hoga! 👆</div>
-                <div class="hinglish-instruction fun-instruction">💡 Pro Tip: Sab kuch click kar ke dekho, har jagah surprise hai! 💡</div>
+                <div class="click-hint hinglish-instruction">👆 Kuch bhi click kar bhai, magic hoga pakka! 👆</div>
+                <div class="hinglish-instruction fun-instruction">💡 Yaar sab kuch click kar, har jagah kuch na kuch surprise hai! Try kar! 💡</div>
                 <button class="party-btn" onclick="startParty()">
-                    <span>🎊 Click for Party! 🎊</span>
+                    <span>🎊 Ab Party Shuru Karte Hain! 🎊</span>
                 </button>
             </div>
         </div>
 
         <!-- Photo Gallery Section -->
         <section class="gallery-section">
-            <h3 class="section-title gallery-title clickable-element" onclick="createClickEffect(event); shuffleGallery()">💖 Beautiful Memories 💖</h3>
-            <div class="hinglish-instruction gallery-instruction">📸 Photos par click kar, bada wala photo dikhega! 📸</div>
-            <div class="hinglish-instruction shuffle-hint">🔄 Title par click kar, photos shuffle ho jayengi! 🔄</div>
+            <h3 class="section-title gallery-title clickable-element" onclick="createClickEffect(event); shuffleGallery()">💖 Yaadein - Kuch Fun Wali! 💖</h3>
+            <div class="hinglish-instruction gallery-instruction">📸 Bro photo par click kar, bada wala dikh jayega! Zoom in! 📸</div>
+            <div class="hinglish-instruction shuffle-hint">🔄 Title ko click kar, photos ka shuffle match ho jayega! Try kar! 🔄</div>
             <div class="gallery-container">
                 <div class="gallery-grid">
                     <div class="gallery-item shape-circle" data-image="kalu-2.png">

@@ -22,7 +22,7 @@ function initMusic() {
         const startMusic = () => {
             if (birthdayMusic.paused && isMusicPlaying) {
                 birthdayMusic.play().then(() => {
-                    showHinglishMessage('🎵 Music shuru ho gayi! 🎵', 2000);
+                    showHinglishMessage('🎵 Ab gaana shuru ho gaya hai! Party mode ON! 🎵', 2500);
                 }).catch(e => {
                     console.log('Music play prevented');
                 });
@@ -68,13 +68,13 @@ function toggleMusic() {
         birthdayMusic.pause();
         isMusicPlaying = false;
         musicToggle.classList.add('muted');
-        musicToggle.querySelector('.music-text').textContent = 'Music OFF';
+        musicToggle.querySelector('.music-text').textContent = 'Gaana OFF Hai';
         musicToggle.querySelector('.music-icon').textContent = '🔇';
     } else {
         birthdayMusic.play();
         isMusicPlaying = true;
         musicToggle.classList.remove('muted');
-        musicToggle.querySelector('.music-text').textContent = 'Music ON';
+        musicToggle.querySelector('.music-text').textContent = 'Gaana ON Hai';
         musicToggle.querySelector('.music-icon').textContent = '🎵';
     }
 }
@@ -195,7 +195,7 @@ function startParty() {
     if (isPartyActive) return;
     
     isPartyActive = true;
-    showHinglishMessage('🎊 PARTY SHURU! Dance kar! 🎊', 2500);
+    showHinglishMessage('🎊 AB PARTY SHURU HAI YAAR! DANCE KAR! 🎊', 3000);
     
     // Increase music volume during party
     if (birthdayMusic && isMusicPlaying) {
@@ -644,7 +644,7 @@ function blowCandle() {
     candleBlown = true;
     flame.classList.add('blown');
     
-    showHinglishMessage('Wah! Candle blow ho gayi! 🎉 Wish karo! 🎂', 2000);
+    showHinglishMessage('Wah yaar! Candle blow ho gayi! 🎉 Ab wish kar le bhai! 🎂', 2500);
     
     // Create celebration effect
     setTimeout(() => {
@@ -668,9 +668,9 @@ function surpriseHeroClick() {
     const heroImage = document.getElementById('heroImage');
     const clickCounter = document.getElementById('heroClickCounter');
     
-    // Update click counter
+    // Update click counter with Hinglish
     if (clickCounter) {
-        clickCounter.textContent = `Clicks: ${heroClickCount}`;
+        clickCounter.textContent = `Kitne Baar Click Kiya: ${heroClickCount}`;
         clickCounter.classList.add('show');
         setTimeout(() => {
             clickCounter.classList.remove('show');
@@ -685,12 +685,14 @@ function surpriseHeroClick() {
     // Change image immediately
     cycleHeroImage();
     
-    // Hinglish messages based on clicks
+    // Hinglish messages based on clicks - More funny
     const messages = [
-        'Waah! Aur click kar! 😄',
-        'Mast hai! Phir se try kar! 🎉',
-        'Bohot sahi! Keep going! 🚀',
-        'Legend! Ek aur! 💪'
+        'Waah bhai! Aur click kar! 😄',
+        'Mast hai yaar! Phir se try kar! 🎉',
+        'Bohot sahi! Keep going bro! 🚀',
+        'Legend hai tu! Ek aur click! 💪',
+        'Chal raha hai bhai! Aur kar! 🔥',
+        'Shabash! Phir se! 👏'
     ];
     if (heroClickCount <= 4) {
         showHinglishMessage(messages[heroClickCount - 1], 1500);
@@ -702,7 +704,7 @@ function surpriseHeroClick() {
         startParty();
         showHinglishMessage(`${heroClickCount} clicks! PARTY TIME! 🎊`, 2000);
         if (clickCounter) {
-            clickCounter.textContent = `🎉 ${heroClickCount} CLICKS! PARTY TIME! 🎉`;
+            clickCounter.textContent = `🎉 ${heroClickCount} CLICKS! AB PARTY TIME! 🎉`;
             clickCounter.style.background = 'rgba(255, 107, 157, 0.95)';
             setTimeout(() => {
                 clickCounter.style.background = 'rgba(118, 75, 162, 0.95)';
@@ -750,7 +752,7 @@ function shuffleGallery() {
     }
     
     // Show Hinglish message
-    showHinglishMessage('Wah! Photos shuffle ho gayi! 🎉', 2000);
+    showHinglishMessage('Wah bhai! Photos shuffle ho gayi! Mix-match ho gaya! 🎉', 2500);
 }
 
 // Show Hinglish messages
@@ -820,10 +822,52 @@ spinStyle.textContent = `
 `;
 document.head.appendChild(spinStyle);
 
+// Create floating particles
+function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    if (!particlesContainer) return;
+    
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        particle.style.width = particle.style.height = (Math.random() * 3 + 2) + 'px';
+        particle.style.background = `rgba(255, ${Math.random() * 100 + 150}, ${Math.random() * 100 + 150}, ${Math.random() * 0.5 + 0.5})`;
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Hide scroll indicator on scroll
+function handleScrollIndicator() {
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (!scrollIndicator) return;
+    
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 100) {
+            scrollIndicator.classList.add('hidden');
+        } else {
+            scrollIndicator.classList.remove('hidden');
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+}
+
 // Add some floating emojis on page load
 window.addEventListener('load', () => {
     // Initialize music
     initMusic();
+    
+    // Create particles
+    createParticles();
+    
+    // Handle scroll indicator
+    handleScrollIndicator();
     
     setTimeout(() => {
         createEmojiRain();
@@ -841,23 +885,29 @@ window.addEventListener('load', () => {
     // Add custom cursor
     addCursorFollower();
     
-    // Add scroll animations
+    // Add scroll animations with stagger effect
     const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        rootMargin: '0px 0px -50px 0px'
     };
     
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    entry.target.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                }, index * 100);
             }
         });
     }, observerOptions);
     
-    // Observe gallery items
-    galleryItems.forEach(item => {
+    // Observe gallery items with enhanced animations
+    galleryItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(50px) scale(0.8)';
+        
         observer.observe(item);
         
         // Add click effect to gallery items
@@ -865,20 +915,43 @@ window.addEventListener('load', () => {
             if (e.target.closest('.gallery-overlay')) return; // Don't trigger if clicking overlay
             
             item.classList.add('clicked');
-            setTimeout(() => item.classList.remove('clicked'), 400);
+            
+            // Add spin and scale effect
+            item.style.animation = 'galleryPop 0.4s ease, gallerySpin 0.6s ease';
+            
+            setTimeout(() => {
+                item.classList.remove('clicked');
+                item.style.animation = '';
+            }, 600);
+            
             createClickEffect(e);
             
-            // Random Hinglish messages
+            // Random Hinglish messages - More funny and human-like
             const messages = [
-                'Photo khul gayi! 👀',
-                'Mast photo hai! 📸',
-                'Aur photos dekh! 🖼️',
-                'Beautiful! 💖'
+                'Photo khul gayi bhai! 👀',
+                'Mast photo hai yaar! 📸',
+                'Aur photos bhi dekh le bhai! 🖼️',
+                'Beautiful lag rahi hai! 💖',
+                'Waah! Kya photo hai yaar! 😍',
+                'Super duper hit hai! 🔥',
+                'Dekh ke accha laga! 🤩',
+                'Photo mein tu legend lag raha hai! 🏆'
             ];
             const randomMsg = messages[Math.floor(Math.random() * messages.length)];
             setTimeout(() => showHinglishMessage(randomMsg, 1500), 300);
         });
     });
+    
+    // Add spin animation for gallery
+    const gallerySpinStyle = document.createElement('style');
+    gallerySpinStyle.textContent = `
+        @keyframes gallerySpin {
+            0% { transform: rotateY(0deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+    `;
+    document.head.appendChild(gallerySpinStyle);
     
     // Make title clickable
     const title = document.querySelector('.title');
